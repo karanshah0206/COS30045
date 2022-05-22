@@ -7,9 +7,22 @@ export function line(domElementId, region, year) {
   // Clearing Out Any Other Charts
   d3.select(domElementId).selectAll("svg").remove();
 
-  // Chart Heading
-  if (region == "Total World") d3.select(domElementId).select("h2").text("Global Annual CO2 Emissions (Mil. Tonnes)");
-  else d3.select(domElementId).select("h2").text(region + " Annual CO2 Emissions (Mil. Tonnes)");
+  // Chart Heading & Choropleth Country Selection Management
+  if (region == "Total World") {
+    d3.select(domElementId).select("h2").text("Global Annual CO2 Emissions (Mil. Tonnes)");
+  }
+  // Unselect Selected Country
+  else if (region == d3.select(domElementId).select("h2").text().split(" ").reverse().splice(5).reverse().join(" ")) {
+    d3.select("#choropleth").select("svg").selectAll(".country").attr("id", "");
+    line(domElementId, "Total World", year);
+    return;
+  }
+  // Select Different Country
+  else {
+    d3.select("#choropleth").select("svg").selectAll(".country").attr("id", "");
+    d3.select("#choropleth").select("svg").selectAll(".country").attr("id", d => { if(d.properties.name == region) return "selected"; });
+    d3.select(domElementId).select("h2").text(region + " Annual CO2 Emissions (Mil. Tonnes)");
+  }
 
   // Rendering SVG Element On DOM
   let svg = d3.select(domElementId).append("svg").attr("height", h).attr("width", w);

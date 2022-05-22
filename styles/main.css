@@ -18,6 +18,10 @@ h2 { font-size: 20px; }
   stroke-width: 0.5;
   opacity: 1;
 }
+#selected {
+  opacity: 1;
+  stroke-width: 1;
+}
 
 /* Line Chart */
 .line {
