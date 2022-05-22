@@ -23,7 +23,6 @@ export function line(domElementId, region, year) {
         }
   
       // Get Min & Max Values From Parsed Data
-      let min = d3.min(dataset, (d) => { return +d; });
       let max = d3.max(dataset, (d) => { return +d; });
       let minYear = d3.min(years, (d) => { return +d; });
       let maxYear = d3.max(years, (d) => { return +d; });

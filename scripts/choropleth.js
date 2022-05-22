@@ -38,7 +38,7 @@ export function choropleth(domElementId, initialYear) {
       .on("click", (d, i) => { if (i.properties.value) line("#line", i.properties.name, document.getElementById("year").value); })
       // Show Tooltips On Hover Over Country
       .append("title").text((d) => { 
-        if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + initialYear;
+        if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + initialYear;
         else return "No Data\nCountry: " + d.properties.name + "\nYear: " + initialYear;
       });
 
@@ -80,7 +80,7 @@ function transitionChoropleth(svg, path, year) {
         .transition().duration(500).ease(d3.easeCubicInOut).attr("d", path)
         .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; })
         .select("title").text((d) => {
-          if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + year;
+          if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + year;
           else return "No Data\nCountry: " + d.properties.name + "\nYear: " + year;
         });
       
