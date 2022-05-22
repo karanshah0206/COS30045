@@ -7,7 +7,7 @@ export function choropleth(domElementId, initialYear) {
   let svg = d3.select(domElementId).append("svg").attr("height", h).attr("width", w);
 
   // Map and Projection
-  let projection = d3.geoMercator().scale(100).center([0, 25]).translate([w/2, h/2]);
+  let projection = d3.geoMercator().scale(115).center([0, 41]).translate([w/2, h/2]);
   let path = d3.geoPath().projection(projection);
 
   // Get Data Frorm CSV File
@@ -29,11 +29,19 @@ export function choropleth(domElementId, initialYear) {
       // Draw Choropleth Using Paths On SVG Element
       svg.selectAll("path").data(json.features).enter().append("path").attr("d", path)
       .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; })
-      .style("opacity", "0.7")
-      // Defining Interaction With Mouse Hover
-      .on("mouseover", function (d) { d3.select(this).style("stroke", "#333").style("stroke-width", "2"); })
-      .on("mouseout", function (d) { d3.select(this).style("stroke", "none"); });
+      .classed("country", true)
+      // Show Tooltips On Hover Over Country
+      .append("title").text((d) => { 
+        if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + initialYear;
+        else return "No Data.\nCountry: " + d.properties.name + "\nYear: " + initialYear;
+      });
     });
+  });
+
+  document.getElementById("year").addEventListener("change", (e) => {
+    let year = parseInt(e.target.value);
+    document.getElementById("yearLabel").innerText = year;
+    transitionChoropleth(svg, path, year);
   });
 }
 
@@ -58,7 +66,11 @@ function transitionChoropleth(svg, path, year) {
       // Update Choropleth Paths And Add Transition
       svg.selectAll("path").data(json.features)
         .transition().duration(500).ease(d3.easeCubicInOut).attr("d", path)
-        .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; });
+        .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; })
+        .select("title").text((d) => {
+          if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + year;
+          else return "No Data.\nCountry: " + d.properties.name + "\nYear: " + year;
+        });
     });
   });
 }

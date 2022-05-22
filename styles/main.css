@@ -4,3 +4,14 @@ html, body {
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+/* Choropleth */
+.country {
+  stroke: #000;
+  stroke-width: 0.1;
+  opacity: 0.7;
+}
+.country:hover {
+  stroke-width: 0.5;
+  opacity: 1;
+}
