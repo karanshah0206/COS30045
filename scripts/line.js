@@ -5,6 +5,7 @@ export function line(domElementId, region, year) {
   let xPadding = 20, yPadding = 55;
 
   // Rendering SVG Element On DOM
+  d3.select(domElementId).selectAll("svg").remove();
   let svg = d3.select(domElementId).append("svg").attr("height", h).attr("width", w);
 
   // Read CSV Data

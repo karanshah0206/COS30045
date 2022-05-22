@@ -1,3 +1,5 @@
+import { line } from "./line.js";
+
 // Initialise Choropleth On DOM
 export function choropleth(domElementId, initialYear) {
   // Dimensions For SVG Element
@@ -33,6 +35,7 @@ export function choropleth(domElementId, initialYear) {
       svg.selectAll("path").data(json.features).enter().append("path").attr("d", path)
       .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; })
       .classed("country", true)
+      .on("click", (d, i) => { line("#line", i.properties.name, document.getElementById("year").value); })
       // Show Tooltips On Hover Over Country
       .append("title").text((d) => { 
         if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + initialYear;
