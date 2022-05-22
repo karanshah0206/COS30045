@@ -18,7 +18,7 @@ export function choropleth(domElementId, initialYear) {
     let color = d3.scaleQuantize().range(["rgb(255,0,0)", "rgb(254,68,0)", "rgb(248,102,0)", "rgb(238,130,0)", "rgb(223,155,0)", "rgb(205,178,0)", "rgb(182,199,0)", "rgb(152,219,0)", "rgb(111,237,0)", "rgb(0,255,0)"]);
     color.domain([d3.min(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })]);
 
-    let globalChange = 0; // Global Change %
+    let globalChange = 0; // Global Change TWh
     
     // Bind CSV Data To GeoJSON Properties
     d3.json("./datasets/world.geojson").then((json) => {
@@ -38,12 +38,12 @@ export function choropleth(domElementId, initialYear) {
       .on("click", (d, i) => { if (i.properties.value) line("#line", i.properties.name, document.getElementById("year").value); })
       // Show Tooltips On Hover Over Country
       .append("title").text((d) => { 
-        if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + initialYear;
+        if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + " TWh\nCountry: " + d.properties.name + "\nYear: " + initialYear;
         else return "No Data\nCountry: " + d.properties.name + "\nYear: " + initialYear;
       });
 
       // Draw Text Showing Annual Change
-      svg.append("text").text("Global Change: " + globalChange + "%").attr("x", "0").attr("y", h - 5);
+      svg.append("text").text("Global Change: " + globalChange + " TWh").attr("x", "0").attr("y", h - 5);
     });
   });
 
@@ -62,7 +62,7 @@ function transitionChoropleth(svg, path, year) {
     let color = d3.scaleQuantize().range(["rgb(255,0,0)", "rgb(254,68,0)", "rgb(248,102,0)", "rgb(238,130,0)", "rgb(223,155,0)", "rgb(205,178,0)", "rgb(182,199,0)", "rgb(152,219,0)", "rgb(111,237,0)", "rgb(0,255,0)"]);
     color.domain([d3.min(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })]);
 
-    let globalChange = 0; // Global Change %
+    let globalChange = 0; // Global Change TWh
     
     // Bind CSV Data To GeoJSON Properties
     d3.json("./datasets/world.geojson").then((json) => {
@@ -80,11 +80,11 @@ function transitionChoropleth(svg, path, year) {
         .transition().duration(500).ease(d3.easeCubicInOut).attr("d", path)
         .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; })
         .select("title").text((d) => {
-          if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + year;
+          if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + " TWh\nCountry: " + d.properties.name + "\nYear: " + year;
           else return "No Data\nCountry: " + d.properties.name + "\nYear: " + year;
         });
       
-      svg.select("text").text("Global Change: " + globalChange + "%");
+      svg.select("text").text("Global Change: " + globalChange + " TWh");
     });
   });
 }
