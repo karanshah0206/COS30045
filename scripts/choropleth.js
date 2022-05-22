@@ -44,7 +44,7 @@ export function choropleth(domElementId, initialYear) {
       });
 
       // Draw Text Showing Annual Change
-      svg.append("text").text("Global Change: " + globalChange + " TWh").attr("x", "0").attr("y", h - 5);
+      svg.append("text").text("Global Change: " + globalChange + " TWh").attr("x", "0").attr("y", 15);
     });
   });
 
