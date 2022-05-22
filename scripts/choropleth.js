@@ -15,8 +15,9 @@ export function choropleth(domElementId, initialYear) {
   // Get Data Frorm CSV File
   d3.csv("./datasets/annual-change-renewables.csv").then((data) => {
     // Generate Color Scheme Based On Data
-    let color = d3.scaleQuantize().range(["rgb(255,0,0)", "rgb(254,68,0)", "rgb(248,102,0)", "rgb(238,130,0)", "rgb(223,155,0)", "rgb(205,178,0)", "rgb(182,199,0)", "rgb(152,219,0)", "rgb(111,237,0)", "rgb(0,255,0)"]);
-    color.domain([d3.min(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })]);
+    let color = d3.scaleLinear()
+      .domain([d3.min(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })])
+      .range(["red", "lightgreen", "green"]);
 
     let globalChange = 0; // Global Change TWh
     
@@ -59,8 +60,9 @@ function transitionChoropleth(svg, path, year) {
   // Get Data From CSV File
   d3.csv("./datasets/annual-change-renewables.csv").then((data) => {
     // Generate Color Scheme Based On Data
-    let color = d3.scaleQuantize().range(["rgb(255,0,0)", "rgb(254,68,0)", "rgb(248,102,0)", "rgb(238,130,0)", "rgb(223,155,0)", "rgb(205,178,0)", "rgb(182,199,0)", "rgb(152,219,0)", "rgb(111,237,0)", "rgb(0,255,0)"]);
-    color.domain([d3.min(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })]);
+    let color = d3.scaleLinear()
+      .domain([d3.min(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })])
+      .range(["red", "lightgreen", "green"]);
 
     let globalChange = 0; // Global Change TWh
     
