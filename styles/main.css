@@ -4,6 +4,7 @@ html, body {
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+h2 { font-size: 20px; }
 #choropleth, #line { display: inline-block; }
 #variables { margin-left: 1rem; }
 

@@ -4,8 +4,14 @@ export function line(domElementId, region, year) {
   let w = 500, h = 300;
   let xPadding = 20, yPadding = 55;
 
-  // Rendering SVG Element On DOM
+  // Clearing Out Any Other Charts
   d3.select(domElementId).selectAll("svg").remove();
+
+  // Chart Heading
+  if (region == "Total World") d3.select(domElementId).select("h2").text("Global Annual CO2 Emissions (Mil. Tonnes)");
+  else d3.select(domElementId).select("h2").text(region + " Annual CO2 Emissions (Mil. Tonnes)");
+
+  // Rendering SVG Element On DOM
   let svg = d3.select(domElementId).append("svg").attr("height", h).attr("width", w);
 
   // Read CSV Data
