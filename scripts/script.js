@@ -1,10 +1,12 @@
 import { choropleth } from  "./choropleth.js";
+import { line } from "./line.js";
 
 function main() {
   let initialYear = 2020; // Initialise Time Variable
 
   timeline(initialYear); // Initialise Timeline
   choropleth("#choropleth", initialYear); // Draw Choropleth
+  line("#line", "Total World"); // Draw Line Chart
 }
 
 // Timeline & Play/Pause Features
