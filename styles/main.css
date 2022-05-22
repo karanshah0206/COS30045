@@ -20,30 +20,41 @@ html, body {
 /* Line Chart */
 .line {
   fill: none;
-  stroke: red;
+  stroke: #f00;
   stroke-width: 1;
+}
+.marker {
+  fill: #f00;
+  stroke: #f00;
+}
+#markerText {
+  font-size: 11px;
 }
 
 /* Button */
-button {
-  margin: 0; padding: 10px;
+.button {
+  margin: 0; padding: 0;
   background-color: transparent;
   font-size: 20px;
   cursor: pointer;
   border: none;
 }
-button:hover { opacity: 0.7; }
+.button svg { height: 20px !important; width: 20px !important; }
+.button:hover { opacity: 0.7; }
 
 /* Scrollbar */
 .scrollbar {
   height: 26px; margin: 10px 0;
+  width: 50%;
   -webkit-appearance: none;
 }
 
+#yearLabel { margin: 0 5px; }
+
 /* Scrollbar Thumb */
 .scrollbar::-webkit-slider-thumb {
-  box-shadow: 0px 0px 0px #000000;
-  border: 0px solid #000000;
+  box-shadow: 0px 0px 0px #000;
+  border: 0px solid #000;
   height: 20px;
   width: 20px;
   border-radius: 12px;
@@ -53,8 +64,8 @@ button:hover { opacity: 0.7; }
   margin-top: -3px;
 }
 .scrollbar::-moz-range-thumb {
-  box-shadow: 0px 0px 0px #000000;
-  border: 0px solid #000000;
+  box-shadow: 0px 0px 0px #000;
+  border: 0px solid #000;
   height: 20px;
   width: 20px;
   border-radius: 12px;
@@ -63,8 +74,8 @@ button:hover { opacity: 0.7; }
 }
 .scrollbar::-ms-thumb {
   margin-top: 1px;
-  box-shadow: 0px 0px 0px #000000;
-  border: 0px solid #000000;
+  box-shadow: 0px 0px 0px #000;
+  border: 0px solid #000;
   height: 20px;
   width: 20px;
   border-radius: 12px;
@@ -79,7 +90,7 @@ button:hover { opacity: 0.7; }
   box-shadow: 1px 1px 1px #50555C;
   background: #50555C;
   border-radius: 14px;
-  border: 0px solid #000000;
+  border: 0px solid #000;
 }
 .scrollbar::-moz-range-track {
   height: 14px;
@@ -87,7 +98,7 @@ button:hover { opacity: 0.7; }
   box-shadow: 1px 1px 1px #50555C;
   background: #50555C;
   border-radius: 14px;
-  border: 0px solid #000000;
+  border: 0px solid #000;
 }
 .scrollbar::-ms-track {
   height: 14px;
@@ -98,13 +109,13 @@ button:hover { opacity: 0.7; }
 }
 .scrollbar::-ms-fill-lower {
   background: #50555C;
-  border: 0px solid #000000;
+  border: 0px solid #000;
   border-radius: 28px;
   box-shadow: 1px 1px 1px #50555C;
 }
 .scrollbar::-ms-fill-upper {
   background: #50555C;
-  border: 0px solid #000000;
+  border: 0px solid #000;
   border-radius: 28px;
   box-shadow: 1px 1px 1px #50555C;
 }

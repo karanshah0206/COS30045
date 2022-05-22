@@ -6,24 +6,24 @@ function main() {
 
   timeline(initialYear); // Initialise Timeline
   choropleth("#choropleth", initialYear); // Draw Choropleth
-  line("#line", "Total World"); // Draw Line Chart
+  line("#line", "Total World", initialYear); // Draw Line Chart
 }
 
 // Timeline & Play/Pause Features
 function timeline(year) {
   // Initialise Timeline
-  let playButton = document.getElementById("play");
   document.getElementById("year").value = year;
   document.getElementById("yearLabel").innerText = year;
 
   // Timeline Play/Pause Functionality
+  let playButton = document.getElementById("play");
   playButton.addEventListener("click", () => {
     // If Timeline Already Playing, Stop
     if (playButton.classList.contains("playing")) {
-      let timeoutIDs = setTimeout(function() {}, 0);
-      while (timeoutIDs--) clearTimeout(timeoutIDs);
       playButton.classList.remove("playing");
       playButton.innerHTML = "<ion-icon name='play'></ion-icon>";
+      let timeoutIDs = setTimeout(function() {}, 0);
+      while (timeoutIDs--) clearTimeout(timeoutIDs);
     }
     // Else Start Timeline Play
     else {
