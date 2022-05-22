@@ -44,7 +44,20 @@ export function choropleth(domElementId, initialYear) {
       });
 
       // Draw Text Showing Annual Change
-      svg.append("text").text("Global Change: " + globalChange + " TWh").attr("x", "0").attr("y", 15);
+      svg.append("text").attr("id", "globalChange").text("Global Change: " + globalChange + " TWh").attr("x", "0").attr("y", 15);
+
+      // Draw Color Gradient Scale Rectangle
+      svg.append("rect").attr("id", "colorScale").attr("x", 20).attr("y", h - 20).attr("width", 120).attr("height", 20);
+      // Get Linear Color Gradient
+      const defs = svg.append("defs"), linearGradient = defs.append("linearGradient").attr("id", "linear-gradient");
+      linearGradient.selectAll(".stop").data(color.range()).enter().append("stop").attr("offset", (d, i) => i / (color.range().length - 1)).attr("stop-color", d => d);
+      // Append Gradient To Rectangle
+      svg.select("#colorScale").style("fill", "url(#linear-gradient)").style("opacity", "0.7");
+      // Draw Color Gradient Scale
+      svg.append("text").text("0").attr("x", 78).attr("y", h - 25);
+      svg.append("text").text("TWh").attr("x", 170).attr("y", h - 25);
+      svg.append("text").text(Math.ceil(color.domain()[0])).attr("x", 10).attr("y", h - 25).attr("id", "minMarker");
+      svg.append("text").text(Math.ceil(color.domain()[2])).attr("x", 130).attr("y", h - 25).attr("id", "maxMarker");
     });
   });
 
@@ -85,8 +98,13 @@ function transitionChoropleth(svg, path, year) {
           if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + " TWh\nCountry: " + d.properties.name + "\nYear: " + year;
           else return "No Data\nCountry: " + d.properties.name + "\nYear: " + year;
         });
-      
-      svg.select("text").text("Global Change: " + globalChange + " TWh");
+
+      // Update Global Change Text
+      svg.select("#globalChange").text("Global Change: " + globalChange + " TWh");
+
+      // Update Color Scale Text
+      d3.select("#minMarker").text(Math.ceil(color.domain()[0]));
+      d3.select("#maxMarker").text(Math.ceil(color.domain()[2]));
     });
   });
 }
