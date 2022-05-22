@@ -21,8 +21,8 @@
   <h1>Adoption Of Renewable Energy & Worldwide Energy Consumption</h1>
   <!-- Variables -->
   <div id="variables">
-    <label id="yearLabel" for="year">1966</label>
-    <input type="range" id="year" name="year" min="1966" max="2020" value="1966" />
+    <label id="yearLabel" for="year">2020</label>
+    <input oninput="yearVariable()" type="range" class="scrollbar" id="year" name="year" min="1966" max="2020" value="2020" />
   </div>
   <!-- Choropleteh -->
   <div id="choropleth"></div>
@@ -31,5 +31,10 @@
     <p>Authors: Karan Manoj Shah (103141481) | Ishaan Manga (102878937)</p>
     <p>Semetser 1 2022 | COS30045 Data Visualisation | Swinburne University of Technology</p>
   </footer>
+  <!-- Variable Manipulating Scripts -->
+  <script>
+    // Update Year Variable When Scrollbar In Use
+    function yearVariable() { document.getElementById("yearLabel").innerText = document.getElementById("year").value; }
+  </script>
 </body>
 </html>

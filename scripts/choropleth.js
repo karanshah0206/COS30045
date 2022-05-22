@@ -33,7 +33,7 @@ export function choropleth(domElementId, initialYear) {
       // Show Tooltips On Hover Over Country
       .append("title").text((d) => { 
         if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + initialYear;
-        else return "No Data.\nCountry: " + d.properties.name + "\nYear: " + initialYear;
+        else return "No Data\nCountry: " + d.properties.name + "\nYear: " + initialYear;
       });
     });
   });
@@ -69,7 +69,7 @@ function transitionChoropleth(svg, path, year) {
         .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; })
         .select("title").text((d) => {
           if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + year;
-          else return "No Data.\nCountry: " + d.properties.name + "\nYear: " + year;
+          else return "No Data\nCountry: " + d.properties.name + "\nYear: " + year;
         });
     });
   });
