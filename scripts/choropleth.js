@@ -16,6 +16,8 @@ export function choropleth(domElementId, initialYear) {
     let color = d3.scaleQuantize().range(["rgb(255,0,0)", "rgb(254,68,0)", "rgb(248,102,0)", "rgb(238,130,0)", "rgb(223,155,0)", "rgb(205,178,0)", "rgb(182,199,0)", "rgb(152,219,0)", "rgb(111,237,0)", "rgb(0,255,0)"]);
     color.domain([d3.min(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == initialYear && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })]);
 
+    let globalChange = 0; // Global Change %
+    
     // Bind CSV Data To GeoJSON Properties
     d3.json("./datasets/world.geojson").then((json) => {
       data.forEach(datum => {
@@ -23,6 +25,7 @@ export function choropleth(domElementId, initialYear) {
           for (let i = 0; i < json.features.length; i++) {
             let properties = json.features[i].properties;
             if (properties.name == datum.entity) { properties.value = datum.renewables; break; }
+            else if (datum.entity == "World") { globalChange = datum.renewables; break; }
           }
       });
 
@@ -35,6 +38,9 @@ export function choropleth(domElementId, initialYear) {
         if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + initialYear;
         else return "No Data\nCountry: " + d.properties.name + "\nYear: " + initialYear;
       });
+
+      // Draw Text Showing Annual Change
+      svg.append("text").text("Global Change: " + globalChange + "%").attr("x", "0").attr("y", h - 5);
     });
   });
 
@@ -53,6 +59,8 @@ function transitionChoropleth(svg, path, year) {
     let color = d3.scaleQuantize().range(["rgb(255,0,0)", "rgb(254,68,0)", "rgb(248,102,0)", "rgb(238,130,0)", "rgb(223,155,0)", "rgb(205,178,0)", "rgb(182,199,0)", "rgb(152,219,0)", "rgb(111,237,0)", "rgb(0,255,0)"]);
     color.domain([d3.min(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); }), 0, d3.max(data, (d) => { if (d.year == year && d.code != "" && d.code != "OWID_WRL") return parseFloat(d.renewables); })]);
 
+    let globalChange = 0; // Global Change %
+    
     // Bind CSV Data To GeoJSON Properties
     d3.json("./datasets/world.geojson").then((json) => {
       data.forEach(datum => {
@@ -60,6 +68,7 @@ function transitionChoropleth(svg, path, year) {
           for (let i = 0; i < json.features.length; i++) {
             let properties = json.features[i].properties;
             if (properties.name == datum.entity) { properties.value = datum.renewables; break; }
+            else if (datum.entity == "World") { globalChange = datum.renewables; break; }
           }
       });
 
@@ -71,6 +80,8 @@ function transitionChoropleth(svg, path, year) {
           if (d.properties.value) return "Adoption of Renewables: " + d.properties.value + "%\nCountry: " + d.properties.name + "\nYear: " + year;
           else return "No Data\nCountry: " + d.properties.name + "\nYear: " + year;
         });
+      
+      svg.select("text").text("Global Change: " + globalChange + "%");
     });
   });
 }
