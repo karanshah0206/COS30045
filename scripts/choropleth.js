@@ -1,4 +1,5 @@
 import { line } from "./line.js";
+import { pie } from "./pie.js";
 
 // Initialise Choropleth On DOM
 export function choropleth(domElementId, initialYear) {
@@ -36,7 +37,11 @@ export function choropleth(domElementId, initialYear) {
       svg.selectAll("path").data(json.features).enter().append("path").attr("d", path)
       .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#ccc"; })
       .classed("country", true)
-      .on("click", (d, i) => { if (i.properties.value) line("#line", i.properties.name, document.getElementById("year").value); })
+      .on("click", (d, i) => { if (i.properties.value) {
+          line("#line", i.properties.name, document.getElementById("year").value);
+          pie("#pie", i.properties.name);
+        }
+      })
       // Show Tooltips On Hover Over Country
       .append("title").text((d) => { 
         if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + " TWh\nCountry: " + d.properties.name + "\nYear: " + initialYear;
