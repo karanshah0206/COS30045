@@ -49,7 +49,7 @@ export function line(domElementId, region, year) {
       // Initialising Axes
       let xScale = d3.scaleLinear().domain([minYear, maxYear]).range([yPadding, w - xPadding]);
       let yScale = d3.scaleLinear().domain([0, max]).range([h - xPadding, 0]);
-      let xAxis = d3.axisBottom(xScale), yAxis = d3.axisLeft(yScale);
+      let xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d")), yAxis = d3.axisLeft(yScale);
   
       // Draw Line
       let line = d3.line().x((d) => { return xScale(d); }).y((d) => { return yScale(lineData[d]); });
