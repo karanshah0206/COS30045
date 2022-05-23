@@ -43,7 +43,10 @@ export function pie(domElementId, region) {
         .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
       // Drawing Arcs On DOM
-      arcs.append("path").attr("fill", (d, i) => { return color(i); }).attr("d", (d, i) => { return arc(d, i); });
+      arcs.append("path")
+        .attr("fill", (d, i) => { return color(i); })
+        .attr("d", (d, i) => { return arc(d, i); })
+        .append("title").text((d, i) => { return "Source: " + indexToSource(i) + "\nConsumption: " + d.data + " EJ"; });
     }
   });
 }
@@ -58,4 +61,16 @@ function initialiseDataset(data) {
   if (data.hydroelectric != "n/a") dataset.push(data.hydroelectric); else dataset.push("0");
   if (data.renewables != "n/a") dataset.push(data.renewables); else dataset.push("0");
   return dataset;
+}
+
+function indexToSource(index) {
+  switch (index) {
+    case 0: return "Oil";
+    case 1: return "Natural Gas";
+    case 2: return "Coal";
+    case 3: return "Nuclear";
+    case 4: return "Hydroelectric";
+    case 5: return "Other Renewables";
+    default: return "Other";
+  }
 }
