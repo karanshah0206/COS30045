@@ -1,5 +1,6 @@
 import { choropleth } from  "./choropleth.js";
 import { line } from "./line.js";
+import { pie } from "./pie.js";
 
 function main() {
   let initialYear = 2020; // Initialise Time Variable
@@ -7,6 +8,7 @@ function main() {
   timeline(initialYear); // Initialise Timeline
   choropleth("#choropleth", initialYear); // Draw Choropleth
   line("#line", "Total World", initialYear); // Draw Line Chart
+  pie("#pie", "Total World"); // Draw Pie Chart
 }
 
 // Timeline & Play/Pause Features

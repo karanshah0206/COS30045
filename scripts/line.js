@@ -29,9 +29,11 @@ export function line(domElementId, region, year) {
 
   // Read CSV Data
   d3.csv("./datasets/annual-emissions-co2.csv").then((data) => {
+    // Get Data Specific To Selected Region
     let lineData = data.filter((d) => { return d.country == region; })[0];
     let dataset = [], years = [];
 
+    // No Data For Selected Region
     if (lineData == undefined) svg.append("text").attr("x", w/2).attr("y", h/2).text("No Data For Region '" + region + "'!");
     else {
       for (let i = 1966; i <= 2020; i++)

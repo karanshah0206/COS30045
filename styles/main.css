@@ -5,7 +5,7 @@ html, body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 h2 { font-size: 20px; }
-#choropleth, #line { display: inline-block; }
+#choropleth, #line, #pie { display: inline-block; }
 #variables { margin-left: 1rem; }
 
 /* Choropleth */
