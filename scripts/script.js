@@ -51,7 +51,7 @@ function timeline(year) {
         i++; // increment control variable
         setTimeout(function() { loopTimeout(i, max, interval, func) }, interval);
       };
-      loopTimeout(parseInt(scrollBar.value), 2020, 1000, (year) => {
+      loopTimeout(parseInt(scrollBar.value), 2020, 700, (year) => {
         scrollBar.value = year; label.innerText = year;
         document.getElementById("year").dispatchEvent(new Event("change"));
       });
