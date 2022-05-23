@@ -52,22 +52,26 @@ export function line(domElementId, region, year) {
       let xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d")), yAxis = d3.axisLeft(yScale);
   
       // Draw Line
+      let baseLine = d3.line().x((d) => { return xScale(d); }).y((d) => { return yScale(0); });
+      svg.append("path").datum(years).attr("d", baseLine).attr("class", "line").attr("id", "dataLine");
       let line = d3.line().x((d) => { return xScale(d); }).y((d) => { return yScale(lineData[d]); });
-      svg.append("path").datum(years).attr("d", line).attr("class", "line");
-  
+      d3.select("#dataLine").transition().duration(500).ease(d3.easeCubicInOut).attr("d", line);
+
       // Draw Axes
       svg.append("g").attr("transform", "translate(0, " + (h - xPadding) + ")").call(xAxis);
       svg.append("g").attr("transform", "translate(" + yPadding + ", 0)").call(yAxis);
 
-      // Draw Year Market
-      svg.append("circle").attr("cx", xScale(year)).attr("cy", yScale(lineData[year])).attr("r", 4).attr("class", "marker");
-      svg.append("text").text(lineData[year]).attr("id", "markerText").attr("x", xScale(year) - 25).attr("y", yScale(lineData[year]) + 15);
+      // Draw Year Marker
+      svg.append("circle").attr("cx", xScale(year)).attr("cy", yScale(0)).attr("r", 4).attr("class", "marker");
+      svg.select("circle").transition().duration(490).ease(d3.easeCubicInOut).attr("cy", yScale(lineData[year]));
+      svg.append("text").text(lineData[year]).attr("id", "markerText").attr("x", xScale(year) - 25).attr("y", yScale(lineData[year]) + 15).style("opacity", "0");
+      d3.select("#markerText").transition().duration(500).ease(d3.easeCubicInOut).style("opacity", "1");
 
       // Update Year Marker On Year Change
       document.getElementById("year").addEventListener("change", (e) => {
         let newYear = parseInt(e.target.value);
         svg.select("circle").transition().duration(500).ease(d3.easeCubicInOut).attr("cx", xScale(newYear)).attr("cy", yScale(lineData[newYear]));
-        svg.select("#markerText").transition().duration(500).ease(d3.easeCubicInOut).text(lineData[newYear]).attr("x", xScale(newYear) - 25).attr("y", yScale(lineData[newYear]) + 15);
+        svg.select("#markerText").transition().duration(500).ease(d3.easeCubicInOut).text(lineData[newYear]).attr("x", xScale(newYear) - 25).attr("y", yScale(lineData[newYear]) + 15).style("opacity", "1");
       });
     }
   });
