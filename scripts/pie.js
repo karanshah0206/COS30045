@@ -46,6 +46,7 @@ export function pie(domElementId, region) {
       arcs.append("path")
         .attr("fill", (d, i) => { return color(i); })
         .attr("d", (d, i) => { return arc(d, i); })
+        .attr("class", "pieArc")
         .append("title").text((d, i) => { return "Source: " + indexToSource(i) + "\nConsumption: " + d.data + " EJ"; });
     }
   });

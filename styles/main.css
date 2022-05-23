@@ -39,6 +39,10 @@ h2 { font-size: 20px; }
   font-size: 11px;
 }
 
+/* Pie Chart */
+.pieArc { opacity: 0.8; transition: 200ms; }
+.pieArc:hover { opacity: 1; transition: 200ms; }
+
 /* Button */
 .button {
   margin: 0; padding: 0;
