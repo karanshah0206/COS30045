@@ -9,7 +9,7 @@ export function pie(domElementId, region) {
   // Chart Heading
   if (region == "Total World")
     d3.select(domElementId).select("h2").text("Global Energy Consumption By Source 2020 (EJ)");
-  else if (region == d3.select(domElementId).select("h2").text().split(" ").reverse().splice(5).reverse().join(" ")) {
+  else if (region == d3.select(domElementId).select("h2").text().split(" ").reverse().splice(6).reverse().join(" ")) {
     pie(domElementId, "Total World", year);
     return;
   }
