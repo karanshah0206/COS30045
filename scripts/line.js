@@ -11,13 +11,13 @@ export function line(domElementId, region, year) {
   if (region == "Total World") {
     d3.select(domElementId).select("h2").text("Global Annual CO2 Emissions (Mil. Tonnes)");
   }
-  // Unselect Selected Country
+  // Unselect A Country
   else if (region == d3.select(domElementId).select("h2").text().split(" ").reverse().splice(5).reverse().join(" ")) {
     d3.select("#choropleth").select("svg").selectAll(".country").attr("id", "");
     line(domElementId, "Total World", year);
     return;
   }
-  // Select Different Country
+  // Selected Different Country
   else {
     d3.select("#choropleth").select("svg").selectAll(".country").attr("id", "");
     d3.select("#choropleth").select("svg").selectAll(".country").attr("id", d => { if(d.properties.name == region) return "selected"; });
@@ -34,7 +34,7 @@ export function line(domElementId, region, year) {
     let dataset = [], years = [];
 
     // No Data For Selected Region
-    if (lineData == undefined) svg.append("text").attr("x", w/2).attr("y", h/2).text("No Data For Region '" + region + "'!");
+    if (lineData == undefined) svg.append("text").attr("x", w / 2 - 10).attr("y", h / 2).text("No Data For '" + region + "'!");
     else {
       for (let i = 1966; i <= 2020; i++)
         if (lineData[i] != "n/a")

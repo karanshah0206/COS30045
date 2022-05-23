@@ -6,15 +6,16 @@ export function pie(domElementId, region) {
   // Clearing Out Any Other Charts
   d3.select(domElementId).selectAll("svg").remove();
 
-  // Chart Heading
+  // Chart Heading Based On Choropleth Country Selection
   if (region == "Total World")
     d3.select(domElementId).select("h2").text("Global Energy Consumption By Source 2020 (EJ)");
+  // Unselect A Country
   else if (region == d3.select(domElementId).select("h2").text().split(" ").reverse().splice(6).reverse().join(" ")) {
     pie(domElementId, "Total World", year);
     return;
   }
-  else
-    d3.select(domElementId).select("h2").text(region + " Energy Consumption By Source 2020 (EJ)");
+  // Selected Different Country
+  else d3.select(domElementId).select("h2").text(region + " Energy Consumption By Source 2020 (EJ)");
 
   // Rendering SVG Element On DOM
   let svg = d3.select(domElementId).append("svg").attr("height", h).attr("width", w);
@@ -25,7 +26,7 @@ export function pie(domElementId, region) {
     let pieData = data.filter((d) => { return d.country == region; })[0];
 
     // No Data For Selected Region
-    if (pieData == undefined) svg.append("text").attr("x", w / 2).attr("y", h / 2).text("No Data For Region '" + region + "'!");
+    if (pieData == undefined) svg.append("text").attr("x", w / 2 - 10).attr("y", h / 2).text("No Data For '" + region + "'!");
     else {
       // Setting Up Dataset
       let dataset = initialiseDataset(pieData);
