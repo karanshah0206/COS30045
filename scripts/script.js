@@ -364,19 +364,28 @@ function drawPieChart(region, selectedYear) {
       // Setup For Pie Chart
       let outerRadius = w/3, innerRadius = w/4;
       let pieGenerator = d3.pie();
+      let baseArcGenerator = d3.arc().outerRadius(1).innerRadius(0.5);
+      let arcGenerator = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
       let color = d3.scaleOrdinal(d3.schemeCategory10);
 
-      // Setup Arcs
-      let arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+      // Draw Arcs On SVG Element & Add Transition
       let arcs = svg.selectAll("g.arc").data(pieGenerator(dataset)).enter().append("g").attr("class", "arc")
       .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
-
-      // Draw Arcs On SVG Element
       arcs.append("path")
       .attr("fill", (d, i) => { return color(i); })
-      .attr("d", (d, i) => { return arc(d, i); })
+      .attr("d", (d, i) => { return baseArcGenerator(d, i); })
       .attr("class", "pieArc")
-      .append("title").text((d, i) => { return "Source: " + indexToSource(i) + "\nConsumption: " + d.data + " Exajoules"; });
+      .append("title").text((d, i) => { return "Source: " + indexToSource(i) + "\nConsumption: " + d.data + " Exajoules\nShare: " + (d.data/pieData.total * 100).toFixed(2) + "%"; });
+      arcs.selectAll("path").transition().duration(500).ease(d3.easeCubicInOut).attr("d", (d, i) => { return arcGenerator(d, i); });
+
+      // Draw Legend & Add Transition
+      for (let i = 0; i < dataset.length; i++) {
+        let x = w / 2.5, y = h / 2.7 + i * 20;
+        svg.append("rect").attr("x", x).attr("y", y).attr("width", 10).attr("height", 10).style("fill", color(i)).style("opacity", "0");
+        svg.append("text").text(indexToSource(i)).attr("x", x + 20).attr("y", y + 10).style("opacity", "0");
+      }
+      svg.selectAll("rect").transition().duration(1000).style("opacity", "1");
+      svg.selectAll("text").transition().duration(1000).style("opacity", "1");
     }
   });
 }
@@ -390,7 +399,6 @@ function initialiseDataset(data) {
   (data.nuclear != "n/a") ? dataset.push(data.nuclear) : dataset.push("0");
   (data.hydro != "n/a") ? dataset.push(data.hydro) : dataset.push("0");
   (data.renewables != "n/a") ? dataset.push(data.renewables) : dataset.push("0");
-  // (data.total != "n/a") ? dataset.push(data.total) : dataset.push("0");
   return dataset;
 }
 

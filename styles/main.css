@@ -64,6 +64,10 @@ main h2 { font-size: 20px; text-align: center; }
   font-size: 11px;
 }
 
+/* Pie Chart */
+.pieArc { opacity: 0.8; }
+.pieArc:hover { opacity: 1; }
+
 /* Timeline */
 #timeline {
   background-color: #FAFBfD;
