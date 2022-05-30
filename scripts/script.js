@@ -33,7 +33,8 @@ function secondaryChartRedraw(type) {
       else buttons[i].classList.remove("active");
     
     if (type == 0) drawLineChart(activeRegion, year.value);
-    else if (type == 1) drawPieChart(activeRegion, "2020");
+    else if (type == 1) drawPieChart(activeRegion, "2019");
+    else if (type == 2) drawPieChart(activeRegion, "2020");
   }
 }
 
@@ -44,6 +45,8 @@ function regionUpdate(region) {
 
   // Update Appropriate Secondary Chart
   if (buttons[0].classList.contains("active")) drawLineChart(activeRegion, year.value);
+  else if (buttons[1].classList.contains("active")) drawPieChart(activeRegion, "2019");
+  else if (buttons[2].classList.contains("active")) drawPieChart(activeRegion, "2020");
 }
 
 /*********************************
@@ -237,6 +240,7 @@ function drawLineChart(region, initialYear) {
     chart2Heading.innerHTML = "Global Annual CO<sub>2</sub> Emissions (Million Tonnes)";
     region = "Total World";
   }
+  else if (region.length > 16) chart2Heading.innerHTML = region.slice(0, 13) + "... Annual CO<sub>2</sub> Emissions (Million Tonnes)";
   else chart2Heading.innerHTML = region + " Annual CO<sub>2</sub> Emissions (Million Tonnes)";
 
   // Clear Out Any Existing Charts
@@ -336,10 +340,11 @@ function updateLineMarker(newYearString) {
 function drawPieChart(region, selectedYear) {
   // Update Chart Heading
   if (region == "World") {
-    chart2Heading.innerHTML = "Global Energy Consumption By Source (Exajoules)";
+    chart2Heading.innerHTML = "Global Energy Consumption By Source " + selectedYear + " (EJ)";
     region = "Total World";
   }
-  else chart2Heading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
+  else if (region.length > 16) chart2Heading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (EJ)";
+  else chart2Heading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (EJ)";
 
   // Clear Out Any Existing Charts
   d3.select("#"+chart2.id).selectAll("svg").remove();
