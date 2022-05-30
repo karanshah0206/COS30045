@@ -1,12 +1,37 @@
-/* General Styling */
-html, body {
-  margin: 0;
-  padding: 0;
+/* General */
+head, body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0; padding: 0;
 }
-h2 { font-size: 20px; }
-#choropleth, #line, #pie { display: inline-block; }
-#variables { margin-left: 1rem; }
+
+/* Header */
+header {
+  background: linear-gradient(rgba(0,0,0,0.4), #009688), url(../images/splash.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100vh;
+  margin-bottom: 100px;
+}
+header section {
+  text-align: center;
+  color: #ffffff;
+  padding-top: 150px;
+}
+header section h1 {
+  font-size: 130px;
+  font-family: 'Kaushan Script', cursive;
+}
+header section p {
+  font-size: 20px;
+  
+  max-width: 50vw;
+  margin: 30px auto;
+}
+
+/* Visualisations */
+main h2 { font-size: 20px; text-align: center; }
+.height-cap { height: 42px; }
 
 /* Choropleth */
 .country {
@@ -15,18 +40,18 @@ h2 { font-size: 20px; }
   opacity: 0.7;
   transition: 250ms;
 }
-.country:hover {
+.countryHovered {
   stroke-width: 0.5;
   opacity: 1;
   transition: 250ms;
 }
-#selected {
+#countrySelected {
   opacity: 1;
   stroke-width: 1;
 }
 
 /* Line Chart */
-.line {
+#dataLine {
   fill: none;
   stroke: #f00;
   stroke-width: 1;
@@ -39,101 +64,30 @@ h2 { font-size: 20px; }
   font-size: 11px;
 }
 
-/* Pie Chart */
-.pieArc { opacity: 0.8; transition: 200ms; }
-.pieArc:hover { opacity: 1; transition: 200ms; }
+/* Timeline */
+#timeline {
+  background-color: #FAFBfD;
+  border: 1px solid #E1E1E1;
+}
+#timeline p { color: #777777; }
+#timeline button { background-color: transparent; border: none; }
+#timeline button i { color: #777777; font-size: 25px; }
 
-/* Button */
-.button {
-  margin: 0; padding: 0;
-  background-color: transparent;
-  font-size: 20px;
-  cursor: pointer;
+/* Buttons */
+#buttons button {
+  border: 1px solid #E1E1E1;
+  border-right: 1px solid #E1E1E1;
+  border-top: 1px solid #E1E1E1;
+  border-bottom: 1px solid #E1E1E1;
+  background-color: #FAFBfD;
+  color: #777777;
+  height: 100%;
+}
+#buttons button:hover { color: #1D3D63; }
+#buttons button.active {
   border: none;
+  border-bottom: 2px solid #1D3D63;
+  background-color: #FFFFFF;
+  color: #1D3D63;
+  font-weight: 600;
 }
-.button svg { height: 20px !important; width: 20px !important; }
-.button:hover { opacity: 0.7; }
-
-/* Scrollbar */
-.scrollbar {
-  height: 26px; margin: 10px 0;
-  width: 50%;
-  -webkit-appearance: none;
-}
-
-#yearLabel { margin: 0 5px; }
-
-/* Scrollbar Thumb */
-.scrollbar::-webkit-slider-thumb {
-  box-shadow: 0px 0px 0px #000;
-  border: 0px solid #000;
-  height: 20px;
-  width: 20px;
-  border-radius: 12px;
-  background: #529DE1;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -3px;
-}
-.scrollbar::-moz-range-thumb {
-  box-shadow: 0px 0px 0px #000;
-  border: 0px solid #000;
-  height: 20px;
-  width: 20px;
-  border-radius: 12px;
-  background: #529DE1;
-  cursor: pointer;
-}
-.scrollbar::-ms-thumb {
-  margin-top: 1px;
-  box-shadow: 0px 0px 0px #000;
-  border: 0px solid #000;
-  height: 20px;
-  width: 20px;
-  border-radius: 12px;
-  background: #529DE1;
-  cursor: pointer;
-}
-
-/* Scrollbar Slider Track */
-.scrollbar::-webkit-slider-runnable-track {
-  height: 14px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #50555C;
-  background: #50555C;
-  border-radius: 14px;
-  border: 0px solid #000;
-}
-.scrollbar::-moz-range-track {
-  height: 14px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #50555C;
-  background: #50555C;
-  border-radius: 14px;
-  border: 0px solid #000;
-}
-.scrollbar::-ms-track {
-  height: 14px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-.scrollbar::-ms-fill-lower {
-  background: #50555C;
-  border: 0px solid #000;
-  border-radius: 28px;
-  box-shadow: 1px 1px 1px #50555C;
-}
-.scrollbar::-ms-fill-upper {
-  background: #50555C;
-  border: 0px solid #000;
-  border-radius: 28px;
-  box-shadow: 1px 1px 1px #50555C;
-}
-
-/* Scrollbar Focus */
-.scrollbar:focus { outline: none; }
-.scrollbar:focus::-webkit-slider-runnable-track { background: #50555C; }
-.scrollbar:focus::-ms-fill-lower { background: #50555C; }
-.scrollbar:focus::-ms-fill-upper { background: #50555C; }
