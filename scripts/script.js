@@ -45,8 +45,8 @@ function regionUpdate(region) {
 
   // Update Appropriate Secondary Chart
   if (buttons[0].classList.contains("active")) drawLineChart(activeRegion, year.value);
-  else if (buttons[1].classList.contains("active")) drawPieChart(activeRegion, "2019");
-  else if (buttons[2].classList.contains("active")) drawPieChart(activeRegion, "2020");
+  else if (buttons[1].classList.contains("active")) updatePieChart(activeRegion, "2019");
+  else if (buttons[2].classList.contains("active")) updatePieChart(activeRegion, "2020");
 }
 
 /*********************************
@@ -393,6 +393,58 @@ function drawPieChart(region, selectedYear) {
       svg.selectAll("text").transition().duration(1000).style("opacity", "1");
     }
   });
+}
+
+// Update The Arcs On An Existing Pie Chart Based On Region & Year Selection
+function updatePieChart(region, selectedYear) {
+  // If There Is No Pie Chart To Update
+  if (document.getElementsByClassName("arc").length <= 0) drawPieChart(region, selectedYear);
+  else {
+    // Update Chart Heading
+    if (region == "World") {
+      chart2Heading.innerHTML = "Global Energy Consumption By Source " + selectedYear + " (EJ)";
+      region = "Total World";
+    }
+    else if (region.length > 16) chart2Heading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (EJ)";
+    else chart2Heading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (EJ)";
+
+    // Initialise Dimensions
+    let w = chart2.offsetWidth, h = chartHeight;
+
+    // Get Reference To SVG Element On DOM
+    let svg = d3.select("#"+chart2.id).select("svg");
+
+    // Load Data From CSV File
+    d3.csv("./datasets/energy_consumption_by_source_" + selectedYear + ".csv").then((data) => {
+      // Get Data Specific To Active Region
+      let pieData = data.filter((d) => { return d.country == region; })[0];
+
+      // If No Data Available For Selected Region
+      if (pieData == undefined) {
+        svg.html("");
+        svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
+      }
+      else {
+        // Initialise Dataset From Filtered Data
+        let dataset = initialiseDataset(pieData);
+
+        // Setup For Pie Chart
+        let outerRadius = w/3, innerRadius = w/4;
+        let pieGenerator = d3.pie();
+        let arcGenerator = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+        let piePathData = pieGenerator(dataset);
+        let paths = document.getElementsByClassName("arc");
+
+        // Update Existing Pie Chart
+        for (let i = 0; i < piePathData.length; i++) {
+          let path = paths[i].firstChild;
+          path.setAttribute("style", "transition: 300ms;");
+          path.setAttribute("d", arcGenerator(piePathData[i], i));
+          path.innerHTML = "<title>Source: " + indexToSource(i) + "\nConsumption: " + piePathData[i].data + " Exajoules\nShare: " + (piePathData[i].data/pieData.total * 100).toFixed(2) + "%</title>";
+        }
+      }
+    });
+  }
 }
 
 // Adapter Between CSV Data & Pie Chart Dataset
