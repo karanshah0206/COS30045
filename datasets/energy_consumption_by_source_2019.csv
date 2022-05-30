@@ -1,4 +1,4 @@
-countries,oil,gas,coal,nuclear,hydro,renewables,total
+country,oil,gas,coal,nuclear,hydro,renewables,total
 Canada,4.78,4.24,0.63,0.9,3.38,0.51,14.45
 Mexico,3.24,3.17,0.54,0.1,0.21,0.3,7.55
 United States,37.13,30.57,11.34,7.6,2.54,5.71,94.9
