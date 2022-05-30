@@ -33,8 +33,8 @@ function secondaryChartRedraw(type) {
       else buttons[i].classList.remove("active");
     
     if (type == 0) drawLineChart(activeRegion, year.value);
-    else if (type == 1) drawPieChart(activeRegion, "2019");
-    else if (type == 2) drawPieChart(activeRegion, "2020");
+    else if (type == 1) updatePieChart(activeRegion, "2019");
+    else if (type == 2) updatePieChart(activeRegion, "2020");
   }
 }
 
