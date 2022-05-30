@@ -33,7 +33,7 @@ function secondaryChartRedraw(type) {
       else buttons[i].classList.remove("active");
     
     if (type == 0) drawLineChart(activeRegion, year.value);
-    else if (type == 1) d3.select("#"+chart2.id).select("svg").remove();
+    else if (type == 1) drawPieChart(activeRegion, "2020");
   }
 }
 
@@ -230,7 +230,9 @@ function updateChoropleth(newYear) {
    LINE CHART EVENTS & FUNCTIONS
  *********************************/
 
+// Render Line Chart On Secondary Chart
 function drawLineChart(region, initialYear) {
+  // Update Chart Heading
   if (region == "World") {
     chart2Heading.innerHTML = "Global Annual CO<sub>2</sub> Emissions (Million Tonnes)";
     region = "Total World";
@@ -324,4 +326,83 @@ function updateLineMarker(newYearString) {
       svg.select("#markerText").transition().duration(500).ease(d3.easeCubicInOut).text(lineData[newYear]).attr("x", xScale(newYear) - 25).attr("y", yScale(lineData[newYear]) + 15).style("opacity", "1");
     }
   });
+}
+
+/*********************************
+   PIE CHART EVENTS & FUNCTIONS
+ *********************************/
+
+// Render Pie Chart On Secondary Chart
+function drawPieChart(region, selectedYear) {
+  // Update Chart Heading
+  if (region == "World") {
+    chart2Heading.innerHTML = "Global Energy Consumption By Source (Exajoules)";
+    region = "Total World";
+  }
+  else chart2Heading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
+
+  // Clear Out Any Existing Charts
+  d3.select("#"+chart2.id).selectAll("svg").remove();
+
+  // Initialise Dimensions
+  let w = chart2.offsetWidth, h = chartHeight;
+
+  // Render SVG On DOM
+  let svg = d3.select("#"+chart2.id).append("svg").attr("height", h).attr("width", w);
+
+  // Load Data From CSV File
+  d3.csv("./datasets/energy_consumption_by_source_" + selectedYear + ".csv").then((data) => {
+    // Get Data Specific To Active Region
+    let pieData = data.filter((d) => { return d.country == region; })[0];
+
+    // If No Data Available For Selected Region
+    if (pieData == undefined) svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
+    else {
+      // Initialise Dataset From Filtered Data
+      let dataset = initialiseDataset(pieData);
+
+      // Setup For Pie Chart
+      let outerRadius = w/3, innerRadius = w/4;
+      let pieGenerator = d3.pie();
+      let color = d3.scaleOrdinal(d3.schemeCategory10);
+
+      // Setup Arcs
+      let arc = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+      let arcs = svg.selectAll("g.arc").data(pieGenerator(dataset)).enter().append("g").attr("class", "arc")
+      .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
+
+      // Draw Arcs On SVG Element
+      arcs.append("path")
+      .attr("fill", (d, i) => { return color(i); })
+      .attr("d", (d, i) => { return arc(d, i); })
+      .attr("class", "pieArc")
+      .append("title").text((d, i) => { return "Source: " + indexToSource(i) + "\nConsumption: " + d.data + " Exajoules"; });
+    }
+  });
+}
+
+// Adapter Between CSV Data & Pie Chart Dataset
+function initialiseDataset(data) {
+  let dataset = [];
+  (data.oil != "n/a") ? dataset.push(data.oil) : dataset.push("0");
+  (data.gas != "n/a") ? dataset.push(data.gas) : dataset.push("0");
+  (data.coal != "n/a") ? dataset.push(data.coal) : dataset.push("0");
+  (data.nuclear != "n/a") ? dataset.push(data.nuclear) : dataset.push("0");
+  (data.hydro != "n/a") ? dataset.push(data.hydro) : dataset.push("0");
+  (data.renewables != "n/a") ? dataset.push(data.renewables) : dataset.push("0");
+  // (data.total != "n/a") ? dataset.push(data.total) : dataset.push("0");
+  return dataset;
+}
+
+// Identify Energy Source Based On Index In Array
+function indexToSource(index) {
+  switch (index) {
+    case 0: return "Crude Oil";
+    case 1: return "Natural Gas";
+    case 2: return "Coal";
+    case 3: return "Nuclear";
+    case 4: return "Hydroelectricity";
+    case 5: return "Other Renewables";
+    default: break;
+  }
 }
