@@ -35,6 +35,7 @@ function secondaryChartRedraw(type) {
     if (type == 0) drawLineChart(activeRegion, year.value);
     else if (type == 1) updatePieChart(activeRegion, "2019");
     else if (type == 2) updatePieChart(activeRegion, "2020");
+    else if (type == 3) drawBarChart(activeRegion);
   }
 }
 
@@ -470,4 +471,45 @@ function indexToSource(index) {
     case 5: return "Other Renewables";
     default: break;
   }
+}
+
+/*********************************
+   BAR CHART EVENTS & FUNCTIONS
+ *********************************/
+
+function drawBarChart(region) {
+  // Update Chart Heading
+  if (region == "World") {
+    chart2Heading.innerHTML = "Global Energy Consumption By Source (EJ)";
+    region = "Total World";
+  }
+  else if (region.length > 16) chart2Heading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (EJ)";
+  else chart2Heading.innerHTML = region + " Energy Consumption By Source (EJ)";
+
+  // Clear Out Any Existing Charts
+  d3.select("#"+chart2.id).selectAll("svg").remove();
+
+  // Initialise Dimensions
+  let w = chart2.offsetWidth, h = chartHeight;
+  let xPadding = 20, yPadding = 30;
+
+  // Render SVG On DOM
+  let svg = d3.select("#"+chart2.id).append("svg").attr("height", h).attr("width", w);
+
+  // Load Data From CSV Files
+  d3.csv("./datasets/energy_consumption_by_source_2019.csv").then((data19) => {
+    let data2019 = data19.filter((d) => { return d.country == region; })[0];
+    // If No Data Available For Selected Region
+    if (data2019 == undefined) svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
+    else {
+      d3.csv("./datasets/energy_consumption_by_source_2020.csv").then((data20) => {
+        let data2020 = data20.filter((d) => { return d.country == region; })[0];
+        // If No Data Available For Selected Region
+        if (data2020 == undefined) svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
+        else {
+          // TODO: Render Bar Chart On SVG
+        }
+      });
+    }
+  });
 }
