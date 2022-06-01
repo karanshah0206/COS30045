@@ -3,15 +3,20 @@ const year = document.getElementById("year");
 const yearLabel = document.getElementById("yearLabel");
 const playButton = document.getElementById("plause");
 const buttons = document.getElementById("buttons").children;
+const regionSelector = document.getElementById("countrySelector");
 const chart1 = document.getElementById("primaryChart");
 const chart2 = document.getElementById("secondaryChart");
 const chart2Heading = document.getElementById("secondaryChartTitle");
+const chartEmissions = document.getElementById("emissionsChart");
+const chartEmissionsHeading = document.getElementById("emissionsChartHeading");
 const chartHeight = 500;
 let activeRegion = "World";
 
-// Initialising Visualisations
+// Initialising Visualisations & Selectors
 drawChoropleth("2020");
 drawLineChart(activeRegion, "2020");
+initialiseRegionsSelector();
+drawPieChart(regionSelector.value, "2019");
 
 /*********************************
       CHART UPDATE FUNCTIONS
@@ -25,29 +30,37 @@ function primaryChartUpdate() {
 }
 
 // Render Secondary Chart Based On Type
-function secondaryChartRedraw(type) {
+function emissionsChartRedraw(type) {
   // Ensure Type Not Already Active
   if (!buttons[type].classList.contains("active")) {
     for (let i = 0; i < buttons.length; i++)
       if (i == type) buttons[i].classList.add("active");
       else buttons[i].classList.remove("active");
     
-    if (type == 0) drawLineChart(activeRegion, year.value);
-    else if (type == 1) updatePieChart(activeRegion, "2019");
-    else if (type == 2) updatePieChart(activeRegion, "2020");
-    else if (type == 3) drawBarChart(activeRegion);
+    if (type == 0) updatePieChart(regionSelector.value, "2019");
+    else if (type == 1) updatePieChart(regionSelector.value, "2020");
+    else if (type == 2) updateBarChart(regionSelector.value);
   }
 }
 
 // Update Currently Active Region & Render Charts Accordingly
-function regionUpdate(region) {
+function choroplethRegionUpdate(region) {
   if (activeRegion == region) activeRegion = "World";
   else activeRegion = region;
 
-  // Update Appropriate Secondary Chart
-  if (buttons[0].classList.contains("active")) drawLineChart(activeRegion, year.value);
-  else if (buttons[1].classList.contains("active")) updatePieChart(activeRegion, "2019");
-  else if (buttons[2].classList.contains("active")) updatePieChart(activeRegion, "2020");
+  // Update Secondary Chart
+  drawLineChart(activeRegion, year.value);
+}
+
+function regionSelectorUpdate() {
+  let type = 0;
+  for (let i = 0; i < buttons.length; i++)
+    if (buttons[i].classList.contains("active")) { type = i; break; }
+
+  // Update Region On Appropriate Chart
+  if (type == 0) updatePieChart(regionSelector.value, "2019");
+  else if (type == 1) updatePieChart(regionSelector.value, "2020");
+  else if (type == 2) updateBarChart(regionSelector.value);
 }
 
 /*********************************
@@ -102,6 +115,18 @@ function timelineButtonUpdate() {
 }
 
 /*********************************
+  REGION SELECT EVENTS & FUNCTIONS
+ *********************************/
+function initialiseRegionsSelector() {
+  d3.csv("./datasets/energy_consumption_by_source_2019.csv").then((data) => {
+    data.forEach(datum => {
+      if (!datum.country.includes("Total") && !datum.country.includes("Other"))
+        regionSelector.innerHTML += "<option value='" + datum.country + "'>" + datum.country + "</option>";
+    });
+  });
+}
+
+/*********************************
    CHOROPLETH EVENTS & FUNCTIONS
  *********************************/
 
@@ -147,7 +172,7 @@ function drawChoropleth(initialYear) {
       // Update Active Region On Click Event
       .on("click", function (d, i) {
         if (i.properties.value) {
-          regionUpdate(i.properties.name);
+          choroplethRegionUpdate(i.properties.name);
           d3.select("#countrySelected").attr("id", "");
           if (activeRegion == i.properties.name) d3.select(this).attr("id", "countrySelected");
         }
@@ -340,21 +365,18 @@ function updateLineMarker(newYearString) {
 // Render Pie Chart On Secondary Chart
 function drawPieChart(region, selectedYear) {
   // Update Chart Heading
-  if (region == "World") {
-    chart2Heading.innerHTML = "Global Energy Consumption By Source " + selectedYear + " (EJ)";
-    region = "Total World";
-  }
-  else if (region.length > 16) chart2Heading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (EJ)";
-  else chart2Heading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (EJ)";
+  if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source " + selectedYear + " (Exajoules)";
+  else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (Exajoules)";
+  else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (Exajoules)";
 
   // Clear Out Any Existing Charts
-  d3.select("#"+chart2.id).selectAll("svg").remove();
+  d3.select("#"+chartEmissions.id).selectAll("svg").remove();
 
   // Initialise Dimensions
-  let w = chart2.offsetWidth, h = chartHeight;
+  let w = chartEmissions.offsetWidth, h = chartHeight;
 
   // Render SVG On DOM
-  let svg = d3.select("#"+chart2.id).append("svg").attr("height", h).attr("width", w);
+  let svg = d3.select("#"+chartEmissions.id).append("svg").attr("height", h).attr("width", w);
 
   // Load Data From CSV File
   d3.csv("./datasets/energy_consumption_by_source_" + selectedYear + ".csv").then((data) => {
@@ -402,18 +424,15 @@ function updatePieChart(region, selectedYear) {
   if (document.getElementsByClassName("arc").length <= 0) drawPieChart(region, selectedYear);
   else {
     // Update Chart Heading
-    if (region == "World") {
-      chart2Heading.innerHTML = "Global Energy Consumption By Source " + selectedYear + " (EJ)";
-      region = "Total World";
-    }
-    else if (region.length > 16) chart2Heading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (EJ)";
-    else chart2Heading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (EJ)";
+    if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source " + selectedYear + " (Exajoules)";
+    else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (Exajoules)";
+    else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (Exajoules)";
 
     // Initialise Dimensions
-    let w = chart2.offsetWidth, h = chartHeight;
+    let w = chartEmissions.offsetWidth, h = chartHeight;
 
     // Get Reference To SVG Element On DOM
-    let svg = d3.select("#"+chart2.id).select("svg");
+    let svg = d3.select("#"+chartEmissions.id).select("svg");
 
     // Load Data From CSV File
     d3.csv("./datasets/energy_consumption_by_source_" + selectedYear + ".csv").then((data) => {
@@ -479,37 +498,143 @@ function indexToSource(index) {
 
 function drawBarChart(region) {
   // Update Chart Heading
-  if (region == "World") {
-    chart2Heading.innerHTML = "Global Energy Consumption By Source (EJ)";
-    region = "Total World";
-  }
-  else if (region.length > 16) chart2Heading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (EJ)";
-  else chart2Heading.innerHTML = region + " Energy Consumption By Source (EJ)";
+  if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source (Exajoules)";
+  else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (Exajoules)";
+  else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
 
   // Clear Out Any Existing Charts
-  d3.select("#"+chart2.id).selectAll("svg").remove();
+  d3.select("#"+chartEmissions.id).selectAll("svg").remove();
 
   // Initialise Dimensions
-  let w = chart2.offsetWidth, h = chartHeight;
-  let xPadding = 20, yPadding = 30;
+  let w = chartEmissions.offsetWidth, h = chartHeight, padding = 30;
 
   // Render SVG On DOM
-  let svg = d3.select("#"+chart2.id).append("svg").attr("height", h).attr("width", w);
+  let svg = d3.select("#"+chartEmissions.id).append("svg").attr("height", h).attr("width", w);
 
-  // Load Data From CSV Files
+  // Load Data From 2019 CSV File
   d3.csv("./datasets/energy_consumption_by_source_2019.csv").then((data19) => {
     let data2019 = data19.filter((d) => { return d.country == region; })[0];
+
     // If No Data Available For Selected Region
     if (data2019 == undefined) svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
     else {
+      // Load Data From 2020 CSV File
       d3.csv("./datasets/energy_consumption_by_source_2020.csv").then((data20) => {
         let data2020 = data20.filter((d) => { return d.country == region; })[0];
+
         // If No Data Available For Selected Region
         if (data2020 == undefined) svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
         else {
-          // TODO: Render Bar Chart On SVG
+          // Get Bar Data
+          let dataset2019 = initialiseDataset(data2019);
+          let dataset2020 = initialiseDataset(data2020);
+          let dataset = dataset2019.concat(dataset2020);
+
+          // Get Keys
+          let keys = Object.keys(data2020); keys.shift(); keys.pop();
+          for (let i = 0; i < keys.length; i++) keys[i] = indexToSource(i);
+
+          // Setup Bar Properties
+          let barPadding = 10;
+          let barWidth = (w - padding*2) / (keys.length*2) - barPadding;
+
+          // Setup Scales & Axes
+          let xScale = d3.scaleBand().domain(keys).range([padding, w - padding]);
+          let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; }), 0]).range([padding, h - padding]);
+          let xAxis = d3.axisBottom(xScale);
+          let yAxis = d3.axisLeft(yScale);
+
+          // Setup Color
+          let color = d3.scaleOrdinal(d3.schemeCategory10);
+
+          // Draw Bars As Rectangles On Chart
+          svg.selectAll("rect").data(dataset).enter().append("rect")
+          .attr("x", (d, i) => {
+            let bw = xScale(indexToSource(i % keys.length));
+            if (i < 6) return bw + barPadding;
+            else return bw + barWidth + barPadding;
+          })
+          .attr("y", (d) => { return yScale(d); })
+          .attr("width", barWidth)
+          .attr("height", 0) // Height Set To Correct Value Later For Transition
+          .attr("fill", (d, i) => { return (i < keys.length) ? color(0) : color(1); })
+          .attr("id", (d, i) => { return "bar"+i; })
+
+          // Set Height To Required Value With Transition
+          for (let i = 0; i < keys.length*2; i++)
+            d3.select("#bar"+i).transition().duration(500).attr("height", h - padding - yScale(dataset[i]));
+
+          // Draw Axes
+          svg.append("g").transition().duration(200).ease(d3.easeCubicInOut).attr("transform", "translate(0, " + (h - padding) + ")").call(xAxis);
+          svg.append("g").transition().duration(200).ease(d3.easeCubicInOut).attr("transform", "translate(" + padding + ", 0)").attr("id", "barYAxis").call(yAxis);
         }
       });
     }
   });
+}
+
+function updateBarChart(region) {
+  // If There Is No Pie Chart To Update
+  if (!document.getElementById("bar0")) drawBarChart(region);
+  else {
+    // Update Chart Heading
+    if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source (Exajoules)";
+    else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (Exajoules)";
+    else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
+
+    // Initialise Dimensions
+    let w = chartEmissions.offsetWidth, h = chartHeight, padding = 30;
+
+    // Render SVG On DOM
+    let svg = d3.select("#"+chartEmissions.id).select("svg");
+
+    // Load Data From 2019 CSV File
+    d3.csv("./datasets/energy_consumption_by_source_2019.csv").then((data19) => {
+      let data2019 = data19.filter((d) => { return d.country == region; })[0];
+
+      // If No Data Available For Selected Region
+      if (data2019 == undefined) {
+        svg.html("");
+        svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
+      }
+      else {
+        // Load Data From 2020 CSV File
+        d3.csv("./datasets/energy_consumption_by_source_2020.csv").then((data20) => {
+          let data2020 = data20.filter((d) => { return d.country == region; })[0];
+
+          // If No Data Available For Selected Region
+          if (data2020 == undefined) {
+            svg.html("");
+            svg.append("text").attr("x", w/2 - 10).attr("y", h/2).text("No Data For '" + region + "'!");
+          }
+          else {
+            // Get Bar Data
+            let dataset2019 = initialiseDataset(data2019);
+            let dataset2020 = initialiseDataset(data2020);
+            let dataset = dataset2019.concat(dataset2020);
+
+            // Get Keys
+            let keys = Object.keys(data2020); keys.shift(); keys.pop();
+            for (let i = 0; i < keys.length; i++) keys[i] = indexToSource(i);
+
+            // Setup Bar Properties
+            let barPadding = 10;
+
+            // Setup Scales & Axes
+            let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; }), 0]).range([padding, h - padding]);
+            let yAxis = d3.axisLeft(yScale);
+
+            // Set Height To Required Value With Transition
+            for (let i = 0; i < keys.length*2; i++)
+            {
+              d3.select("#bar"+i).transition().duration(500).attr("y", yScale(dataset[i])).attr("height", h - padding - yScale(dataset[i]));
+            }
+
+            // Draw Axes
+            svg.select("#barYAxis").transition().duration(200).ease(d3.easeCubicInOut).call(yAxis);
+          }
+        });
+      }
+    });
+  }
 }

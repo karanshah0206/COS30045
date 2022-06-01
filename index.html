@@ -34,28 +34,43 @@
 
   <!-- Visualisations -->
   <main class="container-fluid p-0 m-0 row">
+    <section class="col-6">
+      <!-- Region Selector -->
+      <label for="countrySelector">Select A Region:</label>
+      <select onchange="regionSelectorUpdate()" name="countrySelector" id="countrySelector">
+        <option value='Total World' selected>Total World</option>
+      </select>
+    </section>
+    <section class="col-6">
+      <!-- Energy Sources Chart -->
+      <h2 id="emissionsChartHeading"></h2>
+      <p id="emissionsChart"></p>
+      <!-- Buttons -->
+      <div id="buttons" class="row align-items-center height-cap">
+        <button onclick="emissionsChartRedraw(0)" class="col-4 active">Sources (2019)</button>
+        <button onclick="emissionsChartRedraw(1)" class="col-4">Sources (2020)</button>
+        <button onclick="emissionsChartRedraw(2)" class="col-4">Sources (Both)</button>
+      </div>
+    </section>
+  </main>
+  <main class="container-fluid p-0 mx-0 my-5 row">
     <section class="col-7">
       <!-- Primary Chart -->
       <h2>Annual Change In Renewable Energy Generation (TWh)</h2>
       <p id="primaryChart"></p>
-      <!-- Timeline -->
-      <div id="timeline" class="row align-items-center height-cap">
-        <button onclick="timelineButtonUpdate()" id="plause" class="col-auto p-0 px-2 m-0"><i class="bi bi-play-fill"></i></button>
-        <input oninput="timelineUpdate()" onchange="primaryChartUpdate()" type="range" name="year" id="year" class="col p-0 m-0" min="1966" max="2020" value="2020">
-        <p id="yearLabel" class="col-auto py-0 px-3 m-0">2020</p>
-      </div>
     </section>
     <section class="col-5">
       <!-- Secondary Chart -->
       <h2 id="secondaryChartTitle"></h2>
       <p id="secondaryChart"></p>
-      <!-- Buttons -->
-      <div id="buttons" class="row align-items-center height-cap">
-        <button onclick="secondaryChartRedraw(0)" class="col-3 active">CO<sub>2</sub> Emission</button>
-        <button onclick="secondaryChartRedraw(1)" class="col-3">Sources (2019)</button>
-        <button onclick="secondaryChartRedraw(2)" class="col-3">Sources (2020)</button>
-        <button onclick="secondaryChartRedraw(3)" class="col-3">Sources (Both)</button>
-      </div>
+    </section>
+    <!-- Timeline -->
+    <section id="timeline" class="row align-items-center height-cap">
+      <button onclick="timelineButtonUpdate()" id="plause" class="col-auto p-0 px-2 m-0"><i class="bi bi-play-fill"></i></button>
+      <p class="col-auto py-0 px-2 m-0 leftBorder">1966</p>
+      <input oninput="timelineUpdate()" onchange="primaryChartUpdate()" type="range" name="year" id="year" class="col p-0 m-0" min="1966" max="2020" value="2020">
+      <p class="col-auto py-0 px-2 m-0 rightBorder">2020</p>
+      <p id="yearLabel" class="col-auto py-0 px-3 m-0">2020</p>
     </section>
   </main>
 
