@@ -34,16 +34,16 @@
 
   <!-- Visualisations -->
   <main class="container-fluid p-0 m-0 row">
-    <section class="col-6">
-      <!-- Region Selector -->
-      <label for="countrySelector">Select A Region:</label>
-      <select onchange="regionSelectorUpdate()" name="countrySelector" id="countrySelector">
-        <option value='Total World' selected>Total World</option>
-      </select>
-    </section>
+    <section class="col-6"></section>
     <section class="col-6">
       <!-- Energy Sources Chart -->
       <h2 id="emissionsChartHeading"></h2>
+      <!-- Region Selector -->
+      <p id="regionSelector">
+        <select onchange="regionSelectorUpdate()" name="countrySelector" id="countrySelector">
+          <option value='Total World' selected>Total World</option>
+        </select>
+      </p>
       <p id="emissionsChart"></p>
       <!-- Buttons -->
       <div id="buttons" class="row align-items-center height-cap">

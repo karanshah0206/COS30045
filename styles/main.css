@@ -35,6 +35,10 @@ main h2 { font-size: 20px; text-align: center; }
 main label { font-weight: bold; }
 .height-cap { height: 42px; }
 
+/* Region Selector */
+#regionSelector { display: absolute; }
+#regionSelector select { float: right; }
+
 /* Choropleth */
 .country {
   stroke: #000000;
