@@ -274,7 +274,7 @@ function drawLineChart(region, initialYear) {
 
   // Initialise Dimensions
   let w = chart2.offsetWidth, h = chartHeight;
-  let xPadding = 20, yPadding = 55;
+  let xPadding = 40, yPadding = 55;
 
   // Render SVG On DOM
   let svg = d3.select("#"+chart2.id).append("svg").attr("height", h).attr("width", w);
@@ -311,6 +311,10 @@ function drawLineChart(region, initialYear) {
       svg.append("g").attr("transform", "translate(0, " + (h - xPadding) + ")").call(xAxis);
       svg.append("g").attr("transform", "translate(" + yPadding + ", 0)").call(yAxis);
 
+      // Label Axes
+      svg.append("text").text("Year").attr("x", w/2).attr("y", h - 7).classed("chartLabel", true);
+      svg.append("text").text("CO2 Emissions (Mil. Tonnes)").attr("x", 2).attr("y", yPadding - 10).classed("chartLabel", true);
+
       // Draw Year Marker
       svg.append("circle").attr("cx", xScale(initialYear)).attr("cy", yScale(0)).attr("r", 4).attr("class", "marker");
       svg.select("circle").transition().duration(490).ease(d3.easeCubicInOut).attr("cy", yScale(lineData[initialYear]));
@@ -327,7 +331,7 @@ function updateLineMarker(newYearString) {
 
   // Initialise Dimensions
   let w = chart2.offsetWidth, h = chartHeight;
-  let xPadding = 20, yPadding = 55;
+  let xPadding = 40, yPadding = 55;
 
   // Get Reference To SVG Element
   let svg = d3.select("#"+chart2.id).select("svg");
@@ -506,7 +510,7 @@ function drawBarChart(region) {
   d3.select("#"+chartEmissions.id).selectAll("svg").remove();
 
   // Initialise Dimensions
-  let w = chartEmissions.offsetWidth, h = chartHeight, padding = 30;
+  let w = chartEmissions.offsetWidth, h = chartHeight, padding = 35;
 
   // Render SVG On DOM
   let svg = d3.select("#"+chartEmissions.id).append("svg").attr("height", h).attr("width", w);
@@ -570,6 +574,10 @@ function drawBarChart(region) {
           svg.append("g").transition().duration(200).ease(d3.easeCubicInOut).attr("transform", "translate(0, " + (h - padding) + ")").call(xAxis);
           svg.append("g").transition().duration(200).ease(d3.easeCubicInOut).attr("transform", "translate(" + padding + ", 0)").attr("id", "barYAxis").call(yAxis);
 
+          // Label Axes
+          svg.append("text").text("Energy Sources").attr("x", w/2 - 30).attr("y", h - 7).classed("chartLabel", true);
+          svg.append("text").text("Energy Consumption (EJ)").attr("x", 2).attr("y", padding - 10).classed("chartLabel", true);
+
           // Show Legend
           svg.append("rect").attr("x", w - 85).attr("y", 20).attr("width", 10).attr("height", 10).attr("fill", color(0));
           svg.append("text").attr("x", w - 70).attr("y", 30).text("2019");
@@ -591,7 +599,7 @@ function updateBarChart(region) {
     else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
 
     // Initialise Dimensions
-    let w = chartEmissions.offsetWidth, h = chartHeight, padding = 30;
+    let w = chartEmissions.offsetWidth, h = chartHeight, padding = 35;
 
     // Render SVG On DOM
     let svg = d3.select("#"+chartEmissions.id).select("svg");
