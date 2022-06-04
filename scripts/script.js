@@ -554,19 +554,27 @@ function drawBarChart(region) {
             if (i < 6) return bw + barPadding;
             else return bw + barWidth + barPadding;
           })
-          .attr("y", (d) => { return yScale(d); })
+          .attr("y", w/2)
           .attr("width", barWidth)
           .attr("height", 0) // Height Set To Correct Value Later For Transition
           .attr("fill", (d, i) => { return (i < keys.length) ? color(0) : color(1); })
           .attr("id", (d, i) => { return "bar"+i; })
+          // Append Tooltip Text
+          .append("title").text((d, i) => {return "Source: " + indexToSource(i % keys.length) + "\nConsumption: " + d + " Exajoules\nRegion: " + region + "\nYear: " + ((i < keys.length) ? "2019" : "2020"); });
 
           // Set Height To Required Value With Transition
           for (let i = 0; i < keys.length*2; i++)
-            d3.select("#bar"+i).transition().duration(500).attr("height", h - padding - yScale(dataset[i]));
+            d3.select("#bar"+i).transition().duration(500).attr("y", yScale(dataset[i])).attr("height", h - padding - yScale(dataset[i]));
 
           // Draw Axes
           svg.append("g").transition().duration(200).ease(d3.easeCubicInOut).attr("transform", "translate(0, " + (h - padding) + ")").call(xAxis);
           svg.append("g").transition().duration(200).ease(d3.easeCubicInOut).attr("transform", "translate(" + padding + ", 0)").attr("id", "barYAxis").call(yAxis);
+
+          // Show Legend
+          svg.append("rect").attr("x", w - 85).attr("y", 20).attr("width", 10).attr("height", 10).attr("fill", color(0));
+          svg.append("text").attr("x", w - 70).attr("y", 30).text("2019");
+          svg.append("rect").attr("x", w - 85).attr("y", 40).attr("width", 10).attr("height", 10).attr("fill", color(1));
+          svg.append("text").attr("x", w - 70).attr("y", 50).text("2020");
         }
       });
     }
@@ -624,10 +632,12 @@ function updateBarChart(region) {
             let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; }), 0]).range([padding, h - padding]);
             let yAxis = d3.axisLeft(yScale);
 
-            // Set Height To Required Value With Transition
             for (let i = 0; i < keys.length*2; i++)
             {
+              // Set Height To Required Value With Transition
               d3.select("#bar"+i).transition().duration(500).attr("y", yScale(dataset[i])).attr("height", h - padding - yScale(dataset[i]));
+              // Update Tooltip Text
+              d3.select("#bar"+i).select("title").text("Source: " + indexToSource(i % keys.length) + "\nConsumption: " + dataset[i] + " Exajoules\nRegion: " + region + "\nYear: " + ((i < keys.length) ? "2019" : "2020"));
             }
 
             // Draw Axes
