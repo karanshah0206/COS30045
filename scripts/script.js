@@ -26,7 +26,7 @@ drawPieChart(regionSelector.value, "2019");
 function primaryChartUpdate() {
   yearLabel.innerText = year.value;
   updateChoropleth(year.value);
-  if (buttons[0].classList.contains("active")) updateLineMarker(year.value);
+  updateLineMarker(year.value);
 }
 
 // Render Secondary Chart Based On Type
@@ -540,7 +540,7 @@ function drawBarChart(region) {
 
           // Setup Scales & Axes
           let xScale = d3.scaleBand().domain(keys).range([padding, w - padding]);
-          let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; }), 0]).range([padding, h - padding]);
+          let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; })*1.1, 0]).range([padding, h - padding]);
           let xAxis = d3.axisBottom(xScale);
           let yAxis = d3.axisLeft(yScale);
 
@@ -629,7 +629,7 @@ function updateBarChart(region) {
             let barPadding = 10;
 
             // Setup Scales & Axes
-            let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; }), 0]).range([padding, h - padding]);
+            let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; })*1.1, 0]).range([padding, h - padding]);
             let yAxis = d3.axisLeft(yScale);
 
             for (let i = 0; i < keys.length*2; i++)
