@@ -33,13 +33,38 @@
   </header>
 
   <!-- Visualisations -->
-  <main class="container-fluid p-0 m-0 row">
-    <section class="col-6"></section>
-    <section class="col-6">
+  <main class="container-fluid p-0 py-5 m-0 row">
+    <h2 class="mb-4">Something</h2>
+    <p class="col-md-8 offset-md-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elit pellentesque habitant morbi tristique senectus et netus. Donec massa sapien faucibus et molestie ac feugiat sed. Massa tempor nec feugiat nisl pretium fusce. Velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Sit amet porttitor eget dolor. Cras adipiscing enim eu turpis egestas pretium aenean pharetra.</p>
+    <p class="col-md-8 offset-md-2 mb-5">Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. Elit pellentesque habitant morbi tristique senectus et netus et. Diam maecenas ultricies mi eget mauris pharetra et. Suscipit tellus mauris a diam maecenas sed enim ut. Vel eros donec ac odio tempor orci dapibus. Ipsum a arcu cursus vitae congue mauris. Mauris sit amet massa vitae tortor condimentum lacinia. Odio aenean sed adipiscing diam donec adipiscing tristique.</p>
+    <section class="col-7">
+      <!-- Primary Chart -->
+      <h3>Annual Change In Renewable Energy Generation (TWh)</h3>
+      <p id="primaryChart"></p>
+    </section>
+    <section class="col-5">
+      <!-- Secondary Chart -->
+      <h3 id="secondaryChartTitle"></h3>
+      <p id="secondaryChart"></p>
+    </section>
+    <!-- Timeline -->
+    <section id="timeline" class="row align-items-center height-cap">
+      <button onclick="timelineButtonUpdate()" id="plause" class="col-auto p-0 px-2 m-0"><i class="bi bi-play-fill"></i></button>
+      <p class="col-auto py-0 px-2 m-0 leftBorder">1966</p>
+      <input oninput="timelineUpdate()" onchange="primaryChartUpdate()" type="range" name="year" id="year" class="col p-0 m-0" min="1966" max="2020" value="2020">
+      <p class="col-auto py-0 px-2 m-0 rightBorder">2020</p>
+      <p id="yearLabel" class="col-auto py-0 px-3 m-0">2020</p>
+    </section>
+  </main>
+  <main class="container-fluid py-5 m-0 row">
+    <h2 class="mb-4">Something</h2>
+    <p class="col-md-8 offset-md-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elit pellentesque habitant morbi tristique senectus et netus. Donec massa sapien faucibus et molestie ac feugiat sed. Massa tempor nec feugiat nisl pretium fusce. Velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Sit amet porttitor eget dolor. Cras adipiscing enim eu turpis egestas pretium aenean pharetra.</p>
+    <p class="col-md-8 offset-md-2 mb-5">Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. Elit pellentesque habitant morbi tristique senectus et netus et. Diam maecenas ultricies mi eget mauris pharetra et. Suscipit tellus mauris a diam maecenas sed enim ut. Vel eros donec ac odio tempor orci dapibus. Ipsum a arcu cursus vitae congue mauris. Mauris sit amet massa vitae tortor condimentum lacinia. Odio aenean sed adipiscing diam donec adipiscing tristique.</p>
+    <section class="col-lg-6 offset-lg-3">
       <!-- Energy Sources Chart -->
-      <h2 id="emissionsChartHeading"></h2>
+      <h3 id="emissionsChartHeading"></h3>
       <!-- Region Selector -->
-      <p id="regionSelector">
+      <p id="regionSelector" class="mt-3">
         <select onchange="regionSelectorUpdate()" name="countrySelector" id="countrySelector">
           <option value='Total World' selected>Total World</option>
         </select>
@@ -52,30 +77,11 @@
         <button onclick="emissionsChartRedraw(2)" class="col-4">Sources (Both)</button>
       </div>
     </section>
-  </main>
-  <main class="container-fluid p-0 mx-0 my-5 row">
-    <section class="col-7">
-      <!-- Primary Chart -->
-      <h2>Annual Change In Renewable Energy Generation (TWh)</h2>
-      <p id="primaryChart"></p>
-    </section>
-    <section class="col-5">
-      <!-- Secondary Chart -->
-      <h2 id="secondaryChartTitle"></h2>
-      <p id="secondaryChart"></p>
-    </section>
-    <!-- Timeline -->
-    <section id="timeline" class="row align-items-center height-cap">
-      <button onclick="timelineButtonUpdate()" id="plause" class="col-auto p-0 px-2 m-0"><i class="bi bi-play-fill"></i></button>
-      <p class="col-auto py-0 px-2 m-0 leftBorder">1966</p>
-      <input oninput="timelineUpdate()" onchange="primaryChartUpdate()" type="range" name="year" id="year" class="col p-0 m-0" min="1966" max="2020" value="2020">
-      <p class="col-auto py-0 px-2 m-0 rightBorder">2020</p>
-      <p id="yearLabel" class="col-auto py-0 px-3 m-0">2020</p>
-    </section>
+    <p class="col-md-8 offset-md-2 mt-5">Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. Elit pellentesque habitant morbi tristique senectus et netus et. Diam maecenas ultricies mi eget mauris pharetra et. Suscipit tellus mauris a diam maecenas sed enim ut. Vel eros donec ac odio tempor orci dapibus. Ipsum a arcu cursus vitae congue mauris. Mauris sit amet massa vitae tortor condimentum lacinia. Odio aenean sed adipiscing diam donec adipiscing tristique.</p>
   </main>
 
   <!-- Footer -->
-  <footer class="container py-4">
+  <footer class="container pb-4">
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
       <li class="nav-item"><span class="nav-link px-2 text-muted">Karan Manoj Shah (103141481)</span></li>
       <li class="nav-item"><span class="nav-link px-2 text-muted">Ishaan Manga (102878937)</span></li>
