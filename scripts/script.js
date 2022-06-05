@@ -10,6 +10,7 @@ const chart2Heading = document.getElementById("secondaryChartTitle");
 const chartEmissions = document.getElementById("emissionsChart");
 const chartEmissionsHeading = document.getElementById("emissionsChartHeading");
 const chartConsumption = document.getElementById("consumptionChart");
+const legendConsumption = document.getElementById("consumptionLegend")
 const chartHeight = 500;
 let activeRegion = "World";
 
@@ -662,7 +663,7 @@ function updateBarChart(region) {
 }
 
 /*********************************
-   AREA CHART EVENTS & FUNCTIONS
+        STACKED AREA CHART
  *********************************/
 
 // Render Area Chart On SVG
@@ -743,7 +744,16 @@ function drawAreaChart() {
       svg.select("#valueIndicator").classed("hidden", true);
       svg.select("#sourcesIndicator").classed("hidden", true);
       for (let i = 0; i < keys.length; i++) d3.select("#sourcesIndicator"+i).classed("hidden", true);
-    })
+    });
+
+    // Draw Legend
+    let i = 0;
+    let legendSVG = d3.select("#"+legendConsumption.id).append("svg").attr("width", 160).attr("height", 130);
+    keys.forEach(key => {
+      legendSVG.append("rect").attr("width", 10).attr("height", 10).attr("x", 0).attr("y", 4 + i*20).attr("fill", colour(key));
+      legendSVG.append("text").attr("x", 20).attr("y", 14 + i*20).text(indexToSource(i));
+      i++;
+    });
   });
 }
 
