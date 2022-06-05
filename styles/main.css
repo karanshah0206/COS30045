@@ -74,8 +74,10 @@ main label { font-weight: bold; }
 .pieArc:hover { opacity: 1; }
 
 /* Area Chart */
-.area { opacity: 0.8; }
-.area:hover { opacity: 1; }
+#verticalIndicator { fill: #ff0000; }
+#valueIndicator { fill: #ff0000; }
+#sourcesIndicator { fill: #f5f5f5; opacity: 0.7; }
+.hidden { visibility: hidden; }
 
 /* Timeline */
 #timeline {
