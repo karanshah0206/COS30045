@@ -9,6 +9,7 @@ const chart2 = document.getElementById("secondaryChart");
 const chart2Heading = document.getElementById("secondaryChartTitle");
 const chartEmissions = document.getElementById("emissionsChart");
 const chartEmissionsHeading = document.getElementById("emissionsChartHeading");
+const chartConsumption = document.getElementById("consumptionChart");
 const chartHeight = 500;
 let activeRegion = "World";
 
@@ -17,6 +18,7 @@ drawChoropleth("2020");
 drawLineChart(activeRegion, "2020");
 initialiseRegionsSelector();
 drawPieChart(regionSelector.value, "2019");
+drawAreaChart();
 
 /*********************************
       CHART UPDATE FUNCTIONS
@@ -500,6 +502,7 @@ function indexToSource(index) {
    BAR CHART EVENTS & FUNCTIONS
  *********************************/
 
+// Render Bar Chart On SVG Element
 function drawBarChart(region) {
   // Update Chart Heading
   if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source (Exajoules)";
@@ -589,6 +592,7 @@ function drawBarChart(region) {
   });
 }
 
+// Update Bars & Axes On Chart Based On Region Selection
 function updateBarChart(region) {
   // If There Is No Pie Chart To Update
   if (!document.getElementById("bar0")) drawBarChart(region);
@@ -655,4 +659,48 @@ function updateBarChart(region) {
       }
     });
   }
+}
+
+/*********************************
+   AREA CHART EVENTS & FUNCTIONS
+ *********************************/
+
+// Render Area Chart On SVG
+function drawAreaChart() {
+  // Specifying Chart Dimensions
+  let w = chartConsumption.offsetWidth, h = chartHeight, padding = 35;
+
+  // Render SVG Element On  DOM
+  let svg = d3.select("#"+chartConsumption.id).append("svg").attr("height", h).attr("width", w);
+
+  // Load CSV Dataset
+  d3.csv("./datasets/energy_consumption_by_source_1965_2020.csv").then((data) => {
+    let keys = data.columns.slice(1); // Get Keys From Dataset
+    let colour = d3.scaleOrdinal().domain(keys).range(d3.schemeSet1); // Generate Colour Scheme
+    let stackedData = d3.stack().keys(keys)(data); // Initialise D3 Stack Generator
+
+    // Initialise Axes & Scales
+    let xScale = d3.scaleLinear().domain(d3.extent(data, (d) => { return d.year; })).range([padding, w - padding]);
+    let yScale = d3.scaleLinear().domain([0,600]).range([h - padding, padding]);
+    let xAxis = d3.axisBottom(xScale).ticks(7);
+    let yAxis = d3.axisLeft(yScale);
+
+    // Initialise Area Chart & Area Generator
+    let areaChart = svg.append("g").attr("clip-path", "url(#clip)");
+    let area = d3.area().x((d) => { return xScale(d.data.year); }).y0((d) => { return yScale(d[0]); }).y1((d) => { return yScale(d[1]); });
+
+    // Draw Areas On SVG
+    areaChart.selectAll("mylayers").data(stackedData).enter()
+    .append("path").style("fill", (d) => { return colour(d.key); }).classed("area", true).attr("d", area)
+    // Tooltip Text
+    .append("title").text("Something");
+
+    // Draw Axes
+    svg.append("g").attr("transform", "translate(0, " + (h - padding) + ")").call(xAxis);
+    svg.append("g").attr("transform", "translate(" + padding + ",0)").call(yAxis);
+
+    // Draw Axis Labels
+    svg.append("text").text("Year").attr("x", w/2).attr("y", h - 7).classed("chartLabel", true);
+    svg.append("text").text("Energy Consumption (EJ)").attr("x", 5).attr("y", 23).classed("chartLabel", true);
+  });
 }
