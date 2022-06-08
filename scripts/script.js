@@ -25,14 +25,14 @@ drawAreaChart();
       CHART UPDATE FUNCTIONS
  *********************************/
 
-// Render Primary Chart Based On Year
+// Render Choropleth Based On Year
 function primaryChartUpdate() {
   yearLabel.innerText = year.value;
   updateChoropleth(year.value);
   updateLineMarker(year.value);
 }
 
-// Render Secondary Chart Based On Type
+// Render Share Chart Based On Type
 function shareChartRedraw(type) {
   // Ensure Type Not Already Active
   if (!buttons[type].classList.contains("active")) {
@@ -46,15 +46,14 @@ function shareChartRedraw(type) {
   }
 }
 
-// Update Currently Active Region & Render Charts Accordingly
+// Update Selected Region & Render Charts Accordingly
 function choroplethRegionUpdate(region) {
   if (activeRegion == region) activeRegion = "World";
   else activeRegion = region;
-
-  // Update Secondary Chart
   drawLineChart(activeRegion, year.value);
 }
 
+// Update Pie/Bar Charts When New Region Selected
 function regionSelectorUpdate() {
   let type = 0;
   for (let i = 0; i < buttons.length; i++)
@@ -80,6 +79,7 @@ function timelineUpdate() {
 function pauseTimeline() {
   playButton.firstElementChild.classList.remove("bi-pause-fill");
   playButton.firstElementChild.classList.add("bi-play-fill");
+
   // Clear All Playing Channels
   let timeoutIDs = setTimeout(function() {}, 0);
   while (timeoutIDs--) clearTimeout(timeoutIDs);
@@ -91,12 +91,13 @@ function timelineButtonUpdate() {
   if (playButton.firstElementChild.classList.contains("bi-play-fill")) {
     playButton.firstElementChild.classList.remove("bi-play-fill");
     playButton.firstElementChild.classList.add("bi-pause-fill");
+
     // If At End Of Timeline, Reset To Beginning
-    if (year.value == 2020)
-    {
+    if (year.value == 2020) {
       year.value = 1966;
       yearLabel.innerText = year.value;
     }
+
     // Loop Through Timeline
     let loopTimeout = function(i, max, interval, func) {
       if (i > max) { // End Of Timeline
@@ -104,15 +105,19 @@ function timelineButtonUpdate() {
         playButton.firstElementChild.classList.add("bi-play-fill");
         return;
       }
+
       func(i); // Call Update Function
       i++; // Increment Control Variable
       setTimeout(function() { loopTimeout(i, max, interval, func) }, interval);
     };
+
+    // Start Playing Timeline
     loopTimeout(parseInt(year.value), 2020, 700, (yearVal) => {
       year.value = yearVal;
       primaryChartUpdate();
     });
   }
+
   // If Currently Playing
   else pauseTimeline();
 }
@@ -120,6 +125,8 @@ function timelineButtonUpdate() {
 /*********************************
   REGION SELECT EVENTS & FUNCTIONS
  *********************************/
+
+// Initialise Dropdown Values Based On Dataset
 function initialiseRegionsSelector() {
   d3.csv("./datasets/energy_consumption_by_source_2019.csv").then((data) => {
     data.forEach(datum => {
@@ -169,10 +176,9 @@ function drawChoropleth(initialYear) {
       svg.selectAll("path").data(json.features).enter().append("path").attr("d", path)
       .style("fill", (d) => { return (d.properties.value) ? color(d.properties.value) : "#CCCCCC"; })
       .classed("country", true)
-      // Mouse Hover Events Work Only If Region Contains Data
+      // Mouse Events Work Only If Data Exists For Region
       .on("mouseenter", function() { if (!d3.select(this).attr("style").includes("fill: rgb(204, 204, 204);")) d3.select(this).classed("countryHovered", true); })
       .on("mouseout", function() { if (!d3.select(this).attr("style").includes("fill: rgb(204, 204, 204);")) d3.select(this).classed("countryHovered", false); })
-      // Update Active Region On Click Event
       .on("click", function (d, i) {
         if (i.properties.value) {
           choroplethRegionUpdate(i.properties.name);
@@ -180,7 +186,7 @@ function drawChoropleth(initialYear) {
           if (activeRegion == i.properties.name) d3.select(this).attr("id", "countrySelected");
         }
       })
-      // Show Tooltips When Hovering Over Country
+      // Tooltip Content
       .append("title").text((d) => {
         if (d.properties.value) return "Annual Change Renewables: " + d.properties.value + " TWh\nCountry: " + d.properties.name + "\nYear: " + initialYear;
         return "No Data\nCountry: " + d.properties.name + "\nYear: " + initialYear;
@@ -189,7 +195,7 @@ function drawChoropleth(initialYear) {
       // Draw Global Change Text Indicator
       svg.append("text").attr("id", "globalChange").text("Global Change: " + globalChangeValue + " TWh").attr("x", w - 210).attr("y", h - 10);
 
-      // Draw Color Gradient Scale Rectangle
+      // Draw Color Gradient Scale
       svg.append("rect").attr("id", "colorScale").attr("x", 20).attr("y", h - 50).attr("width", 120).attr("height", 20);
       // Get Linear Color Gradient
       const defs = svg.append("defs"), linearGradient = defs.append("linearGradient").attr("id", "linear-gradient");
@@ -284,7 +290,7 @@ function drawLineChart(region, initialYear) {
 
   // Get Data From CSV File
   d3.csv("./datasets/annual-emissions-co2.csv").then((data) => {
-    // Get Data Specific To Active Region
+    // Filter Data Specific To Active Region
     let lineData = data.filter((d) => { return d.country == region; })[0];
     let dataset = [], years = [];
 
@@ -645,8 +651,7 @@ function updateBarChart(region) {
             let yScale = d3.scaleLinear().domain([d3.max(dataset, (d) => { return +d; })*1.1, 0]).range([padding, h - padding]);
             let yAxis = d3.axisLeft(yScale);
 
-            for (let i = 0; i < keys.length*2; i++)
-            {
+            for (let i = 0; i < keys.length*2; i++) {
               // Set Height To Required Value With Transition
               d3.select("#bar"+i).transition().duration(500).attr("y", yScale(dataset[i])).attr("height", h - padding - yScale(dataset[i]));
               // Update Tooltip Text
@@ -704,17 +709,18 @@ function drawAreaChart() {
 
     // Veretical Indicator
     svg.append("rect").attr("id", "verticalIndicator").classed("hidden", true)
-    .attr("y", padding).attr("x", 0).attr("height", h - padding*2).attr("width", 2)
+    .attr("y", padding).attr("x", 0).attr("height", h - padding*2).attr("width", 2);
+
     // Year Indicator
     svg.append("text").attr("id", "valueIndicator").classed("hidden", true)
     .attr("y", padding + 10).attr("x", 50).text("2020");
+
     // Energy Value Indicator
     svg.append("rect").attr("id", "sourcesIndicator").classed("hidden", true)
     .attr("y", padding + 30).attr("x", 50).attr("height", 130).attr("width", 200);
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i++)
       svg.append("text").attr("id", "sourcesIndicator"+i).classed("hidden", true)
       .attr("y", padding + 50 + i*20).attr("x", 55).text(indexToSource(i) + ":");
-    }
 
     // Mouse Entered & Moved
     svg.on("mousemove", function(d) {
@@ -748,8 +754,7 @@ function drawAreaChart() {
     });
 
     // Draw Legend
-    let i = 0;
-    let legendSVG = d3.select("#"+legendConsumption.id).append("svg").attr("width", 160).attr("height", 130);
+    let i = 0, legendSVG = d3.select("#"+legendConsumption.id).append("svg").attr("width", 160).attr("height", 130);
     keys.forEach(key => {
       legendSVG.append("rect").attr("width", 10).attr("height", 10).attr("x", 0).attr("y", 4 + i*20).attr("fill", colour(key));
       legendSVG.append("text").attr("x", 20).attr("y", 14 + i*20).text(indexToSource(i));
@@ -758,6 +763,7 @@ function drawAreaChart() {
   });
 }
 
+// Get Energy Consumption Of Source From Data
 function getValueFromData(data, index) {
   switch (index) {
     case 0: return parseFloat(data.oil).toFixed(2) + " EJ";
