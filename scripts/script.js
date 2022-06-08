@@ -7,8 +7,8 @@ const regionSelector = document.getElementById("countrySelector");
 const chart1 = document.getElementById("primaryChart");
 const chart2 = document.getElementById("secondaryChart");
 const chart2Heading = document.getElementById("secondaryChartTitle");
-const chartEmissions = document.getElementById("emissionsChart");
-const chartEmissionsHeading = document.getElementById("emissionsChartHeading");
+const chartShare = document.getElementById("shareChart");
+const chartShareHeading = document.getElementById("shareChartHeading");
 const chartConsumption = document.getElementById("consumptionChart");
 const legendConsumption = document.getElementById("consumptionLegend")
 const chartHeight = 500;
@@ -33,7 +33,7 @@ function primaryChartUpdate() {
 }
 
 // Render Secondary Chart Based On Type
-function emissionsChartRedraw(type) {
+function shareChartRedraw(type) {
   // Ensure Type Not Already Active
   if (!buttons[type].classList.contains("active")) {
     for (let i = 0; i < buttons.length; i++)
@@ -372,18 +372,18 @@ function updateLineMarker(newYearString) {
 // Render Pie Chart On Secondary Chart
 function drawPieChart(region, selectedYear) {
   // Update Chart Heading
-  if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source " + selectedYear + " (Exajoules)";
-  else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (Exajoules)";
-  else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (Exajoules)";
+  if (region == "Total World") chartShareHeading.innerHTML = "World Energy Consumption By Source " + selectedYear + " (Exajoules)";
+  else if (region.length > 16) chartShareHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (Exajoules)";
+  else chartShareHeading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (Exajoules)";
 
   // Clear Out Any Existing Charts
-  d3.select("#"+chartEmissions.id).selectAll("svg").remove();
+  d3.select("#"+chartShare.id).selectAll("svg").remove();
 
   // Initialise Dimensions
-  let w = chartEmissions.offsetWidth, h = chartHeight;
+  let w = chartShare.offsetWidth, h = chartHeight;
 
   // Render SVG On DOM
-  let svg = d3.select("#"+chartEmissions.id).append("svg").attr("height", h).attr("width", w);
+  let svg = d3.select("#"+chartShare.id).append("svg").attr("height", h).attr("width", w);
 
   // Load Data From CSV File
   d3.csv("./datasets/energy_consumption_by_source_" + selectedYear + ".csv").then((data) => {
@@ -431,15 +431,15 @@ function updatePieChart(region, selectedYear) {
   if (document.getElementsByClassName("arc").length <= 0) drawPieChart(region, selectedYear);
   else {
     // Update Chart Heading
-    if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source " + selectedYear + " (Exajoules)";
-    else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (Exajoules)";
-    else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (Exajoules)";
+    if (region == "Total World") chartShareHeading.innerHTML = "World Energy Consumption By Source " + selectedYear + " (Exajoules)";
+    else if (region.length > 16) chartShareHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source " + selectedYear + " (Exajoules)";
+    else chartShareHeading.innerHTML = region + " Energy Consumption By Source " + selectedYear + " (Exajoules)";
 
     // Initialise Dimensions
-    let w = chartEmissions.offsetWidth, h = chartHeight;
+    let w = chartShare.offsetWidth, h = chartHeight;
 
     // Get Reference To SVG Element On DOM
-    let svg = d3.select("#"+chartEmissions.id).select("svg");
+    let svg = d3.select("#"+chartShare.id).select("svg");
 
     // Load Data From CSV File
     d3.csv("./datasets/energy_consumption_by_source_" + selectedYear + ".csv").then((data) => {
@@ -506,18 +506,18 @@ function indexToSource(index) {
 // Render Bar Chart On SVG Element
 function drawBarChart(region) {
   // Update Chart Heading
-  if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source (Exajoules)";
-  else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (Exajoules)";
-  else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
+  if (region == "Total World") chartShareHeading.innerHTML = "World Energy Consumption By Source (Exajoules)";
+  else if (region.length > 16) chartShareHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (Exajoules)";
+  else chartShareHeading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
 
   // Clear Out Any Existing Charts
-  d3.select("#"+chartEmissions.id).selectAll("svg").remove();
+  d3.select("#"+chartShare.id).selectAll("svg").remove();
 
   // Initialise Dimensions
-  let w = chartEmissions.offsetWidth, h = chartHeight, padding = 35;
+  let w = chartShare.offsetWidth, h = chartHeight, padding = 35;
 
   // Render SVG On DOM
-  let svg = d3.select("#"+chartEmissions.id).append("svg").attr("height", h).attr("width", w);
+  let svg = d3.select("#"+chartShare.id).append("svg").attr("height", h).attr("width", w);
 
   // Load Data From 2019 CSV File
   d3.csv("./datasets/energy_consumption_by_source_2019.csv").then((data19) => {
@@ -599,15 +599,15 @@ function updateBarChart(region) {
   if (!document.getElementById("bar0")) drawBarChart(region);
   else {
     // Update Chart Heading
-    if (region == "Total World") chartEmissionsHeading.innerHTML = "World Energy Consumption By Source (Exajoules)";
-    else if (region.length > 16) chartEmissionsHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (Exajoules)";
-    else chartEmissionsHeading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
+    if (region == "Total World") chartShareHeading.innerHTML = "World Energy Consumption By Source (Exajoules)";
+    else if (region.length > 16) chartShareHeading.innerHTML = region.slice(0, 13) + "... Energy Consumption By Source (Exajoules)";
+    else chartShareHeading.innerHTML = region + " Energy Consumption By Source (Exajoules)";
 
     // Initialise Dimensions
-    let w = chartEmissions.offsetWidth, h = chartHeight, padding = 35;
+    let w = chartShare.offsetWidth, h = chartHeight, padding = 35;
 
     // Render SVG On DOM
-    let svg = d3.select("#"+chartEmissions.id).select("svg");
+    let svg = d3.select("#"+chartShare.id).select("svg");
 
     // Load Data From 2019 CSV File
     d3.csv("./datasets/energy_consumption_by_source_2019.csv").then((data19) => {
@@ -719,17 +719,18 @@ function drawAreaChart() {
     // Mouse Entered & Moved
     svg.on("mousemove", function(d) {
       let cursorX = d.offsetX; // Get Cursor Position
+
       // Render Vertical Indicator If Inside Chart Area
       if (cursorX > padding && cursorX < w - padding) {
         svg.select("#verticalIndicator").classed("hidden", false).attr("x", cursorX);
         let hoveredYear = Math.floor(xScale.invert(cursorX).toFixed(0));
-        // Draw Year Label To Left Of Vertical Indicator If Cursor At Right Of Center Chart
+
+        // Draw Year Label & Data Values
         if (cursorX > w/2) {
           svg.select("#valueIndicator").classed("hidden", false).attr("x", cursorX - 40).text(hoveredYear);
           svg.select("#sourcesIndicator").classed("hidden", false).attr("x", cursorX - 201);
           for (let i = 0; i < keys.length; i++) d3.select("#sourcesIndicator"+i).classed("hidden", false).attr("x", cursorX - 201).text(indexToSource(i) + ": " + getValueFromData(data[hoveredYear-1965], i));
         }
-        // Else Draw Year Label To Right Of Vertical Indicator
         else {
           svg.select("#valueIndicator").classed("hidden", false).attr("x", cursorX + 8).text(hoveredYear);
           svg.select("#sourcesIndicator").classed("hidden", false).attr("x", cursorX + 3);

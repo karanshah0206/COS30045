@@ -32,21 +32,25 @@
     </section>
   </header>
 
-  <!-- Visualisations -->
+  <!-- Renewables Adoption & CO2 Emissions Visualisations -->
   <main class="container-fluid p-0 py-5 m-0 row">
     <h2 class="mb-4">Adoption of Renewables & CO<sub>2</sub> Emissions</h2>
-    <p class="col-md-8 offset-md-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elit pellentesque habitant morbi tristique senectus et netus. Donec massa sapien faucibus et molestie ac feugiat sed. Massa tempor nec feugiat nisl pretium fusce. Velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Sit amet porttitor eget dolor. Cras adipiscing enim eu turpis egestas pretium aenean pharetra.</p>
-    <p class="col-md-8 offset-md-2 mb-5">Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. Elit pellentesque habitant morbi tristique senectus et netus et. Diam maecenas ultricies mi eget mauris pharetra et. Suscipit tellus mauris a diam maecenas sed enim ut. Vel eros donec ac odio tempor orci dapibus. Ipsum a arcu cursus vitae congue mauris. Mauris sit amet massa vitae tortor condimentum lacinia. Odio aenean sed adipiscing diam donec adipiscing tristique.</p>
+    <p class="col-md-8 offset-md-2 mb-3">Adoption of renewables measures the extent to which countries worldwide are using renewable energy sources to generate energy. The following visualisation showcases the absolute annual change in renewables energy by consumption which allows us to estimate whether countries worldwide have been increasing, decreasing, or holding stagnant their generation of energy through renewables sources.</p>
+    <p class="col-md-8 offset-md-2 mb-3">A useful indicator of the environmental consequences of energy generation is greenhouse gas emissions such as CO<sub>2</sub> in the environment. The following visualisation allows you to contrast the adoption of renewables with its effect on CO<sub>2</sub> emissions for the selected region. It is interesting to note that countries slow at renewables adoption or countries reducing their renewables energy output (countries in red) are likely to see higher CO<sub>2</sub> emissions the following year, whereas if the country is holding stagnant or adopting renewable sources, their CO<sub>2</sub> emissions hold stagnant or reduce accordingly.</p>
+    <p class="col-md-8 offset-md-2 mb-5 text-danger"><strong>Note:</strong> Click on a country to view its CO<sub>2</sub> emissions on demand. Click on the same country again to unselect it.</p>
+
+    <!-- Renewables Adoption Chart -->
     <section class="col-7">
-      <!-- Primary Chart -->
       <h3>Annual Change In Renewable Energy Generation (TWh)</h3>
       <p id="primaryChart"></p>
     </section>
+
+    <!-- CO2 Emissions Chart -->
     <section class="col-5">
-      <!-- Secondary Chart -->
       <h3 id="secondaryChartTitle"></h3>
       <p id="secondaryChart"></p>
     </section>
+
     <!-- Timeline -->
     <section id="timeline" class="row align-items-center height-cap">
       <button onclick="timelineButtonUpdate()" id="plause" class="col-auto p-0 px-2 m-0"><i class="bi bi-play-fill"></i></button>
@@ -56,33 +60,45 @@
       <p id="yearLabel" class="col-auto py-0 px-3 m-0">2020</p>
     </section>
   </main>
+
+  <!-- Energy Sources & Energy Consumption By Source Visualisations -->
   <main class="container-fluid py-5 m-0 row">
     <h2 class="mb-4">Energy Sources & Consumption</h2>
-    <p class="col-md-8 offset-md-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elit pellentesque habitant morbi tristique senectus et netus. Donec massa sapien faucibus et molestie ac feugiat sed. Massa tempor nec feugiat nisl pretium fusce. Velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Sit amet porttitor eget dolor. Cras adipiscing enim eu turpis egestas pretium aenean pharetra.</p>
-    <p class="col-md-8 offset-md-2 mb-5">Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. Elit pellentesque habitant morbi tristique senectus et netus et. Diam maecenas ultricies mi eget mauris pharetra et. Suscipit tellus mauris a diam maecenas sed enim ut. Vel eros donec ac odio tempor orci dapibus. Ipsum a arcu cursus vitae congue mauris. Mauris sit amet massa vitae tortor condimentum lacinia. Odio aenean sed adipiscing diam donec adipiscing tristique.</p>
-    <!-- Energy Consumption Chart -->
+    <p class="col-md-8 offset-md-2 mb-3">You have explored above how the world is adopting to renewable energy sources and what is its impact on the environment. However, what are the various renewable energy sources? What is their energy share in comparison to other energy sources? Let's take a moment here to understand just how much the world's energy demands have grown over the years, and which energy sources are being used to fuel a majority of this growth.</p>
+    <p class="col-md-8 offset-md-2 mb-3">As seen in the visualisation below, the world consumed just above 150 Exajoules of energy in 1965. In 2019, our energy consumption was nearly 4 times that. Note how the energy consumption dropped slightly in 2008 and 2020, which can be attributed to global economic crisis and the Covid-19 pandemic respectively. Amongst the energy sources shown, nuclear energy, hydroelectricity, and "Other Renewables" are considered as sustainable energy sources (nuclear is debatable, of course). "Other Renewables" is cumulative of solar energy, wind energy, biomass fuel, and geothermal energy.</p>
+    <p class="col-md-8 offset-md-2 mb-5 text-danger"><strong>Note:</strong> Hover over the chart to view specific energy consumption breakdown for an year of your preference.</p>
+
+    <!-- World Energy Consumption Chart -->
     <h3>World Energy Consumption By Source 1965 to 2020 (Exajoule)</h3>
     <section class="col-lg-6 offset-lg-3"><p id="consumptionChart" class="p-0 m-0"></p></section>
     <section class="col-lg-3"><p id="consumptionLegend" class="p-0 m-0"></p></section>
-    <p class="col-md-8 offset-md-2 mt-4 mb-5">Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. Elit pellentesque habitant morbi tristique senectus et netus et. Diam maecenas ultricies mi eget mauris pharetra et. Suscipit tellus mauris a diam maecenas sed enim ut. Vel eros donec ac odio tempor orci dapibus. Ipsum a arcu cursus vitae congue mauris. Mauris sit amet massa vitae tortor condimentum lacinia. Odio aenean sed adipiscing diam donec adipiscing tristique.</p>
+
+    <p class="col-md-8 offset-md-2 mt-5 md-3">Now lets focus on the recent past, specifically the years 2019 and 2020. Explore in the recent years which sources are being used by countries and the world to generate energy, and what is the share of renewables. The "Sources (2019)" and "Sources (2020)" tab allow you to view the share of energy source for your region of selection. The "Sources (Both)" tab allows you to view the change in each energy source from 2019 to 2020 for your selected region. Note that in the recent years, the global share of non-renewable sources has been decreasing whereas the share of renewables (with the exception of Nuclear) has been increasing. While this is good news, clearly, the overall energy profie is still dominated by non-renewables sources, specifically coal, natural gas, and oil.</p>
+    <p class="col-md-8 offset-md-2 mb-5 text-danger"><strong>Note:</strong> Hover over the arcs/bars to see exact energy consumption values. Hovering on an arc shows % share as well.</p>
+
+    <!-- Energy Share 2019-2020 Chart -->
     <section class="col-lg-6 offset-lg-3">
-      <!-- Energy Sources Chart -->
-      <h3 id="emissionsChartHeading"></h3>
+      <h3 id="shareChartHeading"></h3>
+
       <!-- Region Selector -->
       <p id="regionSelector" class="mt-3">
         <select onchange="regionSelectorUpdate()" name="countrySelector" id="countrySelector">
           <option value='Total World' selected>Total World</option>
         </select>
       </p>
-      <p id="emissionsChart"></p>
+
+      <!-- Dynamically Created Chart -->
+      <p id="shareChart"></p>
+
       <!-- Buttons -->
       <div id="buttons" class="row align-items-center height-cap">
-        <button onclick="emissionsChartRedraw(0)" class="col-4 active">Sources (2019)</button>
-        <button onclick="emissionsChartRedraw(1)" class="col-4">Sources (2020)</button>
-        <button onclick="emissionsChartRedraw(2)" class="col-4">Sources (Both)</button>
+        <button onclick="shareChartRedraw(0)" class="col-4 active">Sources (2019)</button>
+        <button onclick="shareChartRedraw(1)" class="col-4">Sources (2020)</button>
+        <button onclick="shareChartRedraw(2)" class="col-4">Sources (Both)</button>
       </div>
     </section>
-    <p class="col-md-8 offset-md-2 mt-5">Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. Elit pellentesque habitant morbi tristique senectus et netus et. Diam maecenas ultricies mi eget mauris pharetra et. Suscipit tellus mauris a diam maecenas sed enim ut. Vel eros donec ac odio tempor orci dapibus. Ipsum a arcu cursus vitae congue mauris. Mauris sit amet massa vitae tortor condimentum lacinia. Odio aenean sed adipiscing diam donec adipiscing tristique.</p>
+
+    <p class="col-md-8 offset-md-2 mt-5">Hopefully these visualisations have helped you explore how energy is generated, which energy sources are sustainable, what has the trend in energy generation by sources been, and how this trend been changing in the recent years. The data used in these visualisations was made available by BP Inc. in their <a href="https://www.bp.com/en/global/corporate/energy-economics/statistical-review-of-world-energy.html" target="_blank">2021 Statistical Review of World Energy</a> and by Our World In Data on their <a href="https://ourworldindata.org/renewable-energy" target="_blank">Renewable Energy webpage</a>.</p>
   </main>
 
   <!-- Footer -->
