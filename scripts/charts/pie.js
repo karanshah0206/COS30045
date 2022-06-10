@@ -30,7 +30,8 @@ function drawPieChart(region, selectedYear) {
       let dataset = initialiseDataset(pieData);
 
       // Setup For Pie Chart
-      let outerRadius = w/3, innerRadius = w/4;
+      let radius = (w > h*1.5) ? h*1.5 : w;
+      let outerRadius = radius/3, innerRadius = radius/4;
       let pieGenerator = d3.pie();
       let baseArcGenerator = d3.arc().outerRadius(1).innerRadius(0.5);
       let arcGenerator = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
@@ -89,7 +90,8 @@ function updatePieChart(region, selectedYear) {
         let dataset = initialiseDataset(pieData);
 
         // Setup For Pie Chart
-        let outerRadius = w/3, innerRadius = w/4;
+        let radius = (w > h*1.5) ? h*1.5 : w;
+        let outerRadius = radius/3, innerRadius = radius/4;
         let pieGenerator = d3.pie();
         let arcGenerator = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
         let piePathData = pieGenerator(dataset);
